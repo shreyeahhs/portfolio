@@ -1,0 +1,68 @@
+[
+  {
+    "title": "Edudiagno — AI Interview Platform",
+    "slug": "edudiagno",
+    "summary": "Real-time AI-powered interview system with speech recognition, sentiment analysis, and instant feedback. Built with FastAPI backend and React frontend.",
+    "year": 2024,
+    "tags": ["AI/ML", "Full-Stack", "Real-time"],
+    "tech": ["Python", "FastAPI", "React", "TypeScript", "WebRTC", "Transformers"],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyas-gowda"
+    }
+  },
+  {
+    "title": "GraphGeo Metadata Cleanup",
+    "slug": "graphgeo-metadata",
+    "summary": "Geospatial metadata standardization tool processing 10K+ records. Automated data quality checks and normalization pipelines.",
+    "year": 2024,
+    "tags": ["Data Engineering", "Geospatial"],
+    "tech": ["Python", "Pandas", "PostGIS", "SQL"],
+    "featured": true,
+    "links": {}
+  },
+  {
+    "title": "YouTube AI Summarizer",
+    "slug": "youtube-summarizer",
+    "summary": "Extract and summarize YouTube video transcripts using NLP. Generate key insights and chapter breakdowns automatically.",
+    "year": 2024,
+    "tags": ["AI/ML", "NLP"],
+    "tech": ["Python", "OpenAI API", "LangChain", "FastAPI"],
+    "featured": true,
+    "links": {
+      "live": "https://yt-summarizer.example.com"
+    }
+  },
+  {
+    "title": "Buzzlink Marketplace",
+    "slug": "buzzlink-marketplace",
+    "summary": "E-commerce platform with real-time inventory management, payment integration, and admin dashboard.",
+    "year": 2023,
+    "tags": ["Full-Stack", "E-commerce"],
+    "tech": ["React", "Node.js", "MongoDB", "Stripe", "Redis"],
+    "featured": false,
+    "links": {}
+  },
+  {
+    "title": "Smart Campus Navigation",
+    "slug": "campus-nav",
+    "summary": "Indoor navigation system using Bluetooth beacons and pathfinding algorithms for university campus.",
+    "year": 2023,
+    "tags": ["Mobile", "IoT"],
+    "tech": ["React Native", "BLE", "Firebase", "A* Algorithm"],
+    "featured": false,
+    "links": {}
+  },
+  {
+    "title": "Expense Tracker Pro",
+    "slug": "expense-tracker",
+    "summary": "Personal finance management app with budget forecasting, category analysis, and export capabilities.",
+    "year": 2023,
+    "tags": ["Full-Stack", "Finance"],
+    "tech": ["Vue.js", "Python", "PostgreSQL", "Chart.js"],
+    "featured": false,
+    "links": {
+      "live": "https://expense-tracker.example.com"
+    }
+  }
+]

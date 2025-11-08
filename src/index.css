@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Safe area insets for mobile devices */
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    
+    /* Terminal-style color system */
+    --bg: 210 29% 8%;           /* #0B0F14 - near-black */
+    --panel: 210 33% 9%;        /* #0E141B - deep navy */
+    --glass: 0 0% 100% / 0.06;  /* rgba(255,255,255,0.06) */
+    --border-color: 0 0% 100% / 0.12;
+    --grid-stroke: 0 0% 100% / 0.04;
+    
+    /* Emerald accent system */
+    --accent: 142 71% 45%;      /* #22c55e - emerald-500 */
+    --accent-glow: 158 64% 52%; /* #34d399 - emerald-400 */
+    --accent-dark: 142 76% 36%; /* emerald-600 */
+    --accent-muted: 142 71% 45% / 0.2;
+    
+    /* Orange accent for rail navigation */
+    --accent-orange: 22 93% 55%;      /* #ff7a1a - vibrant orange */
+    --accent-orange-glow: 22 93% 55% / 0.4;
+    
+    /* Neon green accent */
+    --accent-green: 142 71% 45%;
+    
+    /* Text hierarchy */
+    --text-strong: 218 11% 90%;  /* #E5E7EB */
+    --text-muted: 214 13% 64%;   /* #9BA3AF */
+    --text-subtle: 214 13% 44%;
+    
+    /* Traffic light colors */
+    --traffic-red: 4 90% 58%;    /* #FF5F57 */
+    --traffic-yellow: 45 99% 58%; /* #FEBC2E */
+    --traffic-green: 122 61% 45%; /* #28C840 */
+
+    /* Standard tokens for compatibility */
+    --background: 210 29% 8%;
+    --foreground: 218 11% 90%;
+    --card: 210 33% 9%;
+    --card-foreground: 218 11% 90%;
+    --popover: 210 33% 9%;
+    --popover-foreground: 218 11% 90%;
+    --primary: 142 71% 45%;
+    --primary-foreground: 210 29% 8%;
+    --secondary: 210 33% 15%;
+    --secondary-foreground: 218 11% 90%;
+    --muted: 210 33% 15%;
+    --muted-foreground: 214 13% 64%;
+    --accent-color: 142 71% 45%;
+    --accent-foreground: 210 29% 8%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 218 11% 90%;
+    --border: 0 0% 100% / 0.12;
+    --input: 0 0% 100% / 0.12;
+    --ring: 142 71% 45%;
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-[hsl(var(--bg))] text-[hsl(var(--text-strong))] font-['Inter',sans-serif] antialiased;
+    font-feature-settings: 'liga' 1, 'calt' 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-['JetBrains_Mono',monospace];
+  }
+}
+
+@layer utilities {
+  /* Grid background utility */
+  .bg-grid {
+    background-image: 
+      linear-gradient(to right, hsl(var(--grid-stroke)) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--grid-stroke)) 1px, transparent 1px),
+      radial-gradient(ellipse at center, hsl(var(--panel)) 0%, hsl(var(--bg)) 100%);
+    background-size: 24px 24px, 24px 24px, 100% 100%;
+    background-position: 0 0, 0 0, center center;
+  }
+  
+  /* Diagonal grid background for factory-style sections */
+  .bg-grid-diagonal {
+    background-image: 
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        hsl(var(--grid-stroke)) 20px,
+        hsl(var(--grid-stroke)) 21px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 20px,
+        hsl(var(--grid-stroke)) 20px,
+        hsl(var(--grid-stroke)) 21px
+      ),
+      radial-gradient(ellipse at center, hsl(var(--panel)) 0%, hsl(var(--bg)) 100%);
+  }
+  
+  /* Glassmorphism utility - Apple/Mac style */
+  .glass {
+    @apply bg-[hsl(var(--glass))] backdrop-blur-xl border border-[hsl(var(--border-color))] rounded-2xl;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+  
+  .glass-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .glass-hover:hover {
+    @apply -translate-y-1;
+    background: hsl(var(--glass) / 0.08);
+    box-shadow: 
+      0 12px 40px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  
+  /* Terminal prompt styling */
+  .terminal-prompt {
+    @apply font-['JetBrains_Mono',monospace] text-[hsl(var(--accent))];
+  }
+  
+  /* Accent glow effect */
+  .accent-glow {
+    text-shadow: 0 0 20px hsl(var(--accent-glow) / 0.5);
+  }
+  
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* Hide scrollbar utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

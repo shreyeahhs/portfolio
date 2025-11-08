@@ -1,4 +1,4 @@
-# Shreyas Gowda B — Portfolio
+# Shreyas Gowda — Portfolio
 
 A modern, terminal-inspired portfolio website designed with glassmorphism aesthetics, intelligent motion, and an integrated AI chatbot powered by OpenAI.  
 The interface blends developer console minimalism with smooth animations and data-driven components, all built through careful prompt engineering and front-end craftsmanship.
@@ -190,6 +190,4 @@ MIT License — Free to use, fork, and modify with credit.
 
 ---
 
-Built with ❤️ by **Shreyas Gowda B**
-
-```
+Built with ❤️ by **Shreyas Gowda**

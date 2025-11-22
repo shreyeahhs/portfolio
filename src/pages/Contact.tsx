@@ -50,15 +50,51 @@ const Contact = () => {
 
     setIsSubmitting(true);
 
-    // Simulate API call (replace with actual backend when ready)
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "Thanks for reaching out. I'll get back to you soon.",
+    try {
+      const API_BASE = (import.meta as any).env.VITE_API_BASE || "http://127.0.0.1:8000";
+      const res = await fetch(`${API_BASE}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          message: formData.message.trim(),
+        }),
       });
-      setFormData({ name: "", email: "", message: "" });
+
+      if (!res.ok) {
+        const text = await res.text();
+        toast({
+          title: "Send failed",
+          description: `Server error: ${res.status} ${text}`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const data = await res.json();
+      if (data?.ok) {
+        toast({
+          title: "Message sent!",
+          description: "Thanks for reaching out. I'll get back to you soon.",
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        toast({
+          title: "Send failed",
+          description: "Server responded but did not confirm delivery.",
+          variant: "destructive",
+        });
+      }
+    } catch (err: any) {
+      toast({
+        title: "Network error",
+        description: err?.message || String(err),
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   const socialLinks = [

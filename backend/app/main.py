@@ -1,12 +1,26 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from app.routes import projects, internships, contact, chatbot
-import os
 from dotenv import load_dotenv
 
+# Load environment variables before importing any modules that depend on them
 load_dotenv()
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import os
+from app.routes import projects, internships, contact, chatbot
+import logging
+
 app = FastAPI(title="Shreyas Gowda Portfolio API", version="1.0.0")
+
+
+@app.on_event("startup")
+async def startup_checks():
+    # Validate critical environment variables early and log helpful messages.
+    if not os.getenv("OPENAI_API_KEY"):
+        logging.warning(
+            "OPENAI_API_KEY not set. The chatbot endpoint will return 500 until it's configured."
+        )
+    else:
+        logging.info("OPENAI_API_KEY found — chatbot ready.")
 
 # CORS configuration
 app.add_middleware(

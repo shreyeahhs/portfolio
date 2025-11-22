@@ -79,8 +79,8 @@ const About = () => {
                   efficient code and scalable architectures.
                 </p>
                 <p>
-                  When I'm not coding, you'll find me exploring the latest advancements in AI, 
-                  contributing to open-source projects, or experimenting with new technologies.
+                  When I'm not writing code, I'm usually exploring new AI breakthroughs, contributing to 
+                  open-source tools, or analysing the most random, unnecessary datasets for fun.
                 </p>
               </div>
             </GlassCard>

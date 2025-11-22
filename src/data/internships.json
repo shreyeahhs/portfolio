@@ -1,28 +1,42 @@
 [
   {
     "company": "Publicis Sapient",
-    "role": "Data Analyst Intern — Sustainability Division",
+    "role": "AI Engineering Intern",
     "location": "Bangalore, India",
-    "start": "2024-06",
-    "end": "2024-08",
+    "start": "2023-11",
+    "end": "2023-12",
     "tools": ["Python", "SQL", "Tableau", "AWS", "Power BI"],
     "highlights": [
-      "Analyzed carbon footprint data for Fortune 500 clients, identifying 15% reduction opportunities",
-      "Built automated ETL pipelines processing 100K+ sustainability metrics daily",
-      "Created interactive dashboards for stakeholder reporting, reducing manual work by 60%"
+      "Supported sustainability analytics for enterprise clients by analysing carbon footprint datasets and uncovering 10–15% emission reduction opportunities",
+      "Built automated ETL workflows processing over 100K sustainability and operational metrics daily",
+      "Developed interactive dashboards for leadership insights, reducing manual reporting time by more than 50%"
+    ]
+  },
+  {
+    "company": "Publicis Sapient",
+    "role": "Data Analyst Intern — Sustainability Division",
+    "location": "Bangalore, India",
+    "start": "2024-09",
+    "end": "2024-12",
+    "tools": ["Python", "SQL", "Power BI", "Snowflake", "Excel"],
+    "highlights": [
+      "Worked with large-scale sustainability and operations datasets to produce actionable insights for ongoing client programmes",
+      "Designed KPI dashboards that improved data visibility across business units",
+      "Collaborated with domain experts to validate analytical models and sustainability benchmarks"
     ]
   },
   {
     "company": "Technobeez Solutions",
-    "role": "AI Interviewer Lead Developer",
+    "role": "AI Interviewer Lead Developer (EduDiagno)",
     "location": "Remote",
-    "start": "2023-12",
-    "end": "2024-05",
+    "start": "2025-01",
+    "end": "2025-09",
     "tools": ["FastAPI", "React", "OpenAI", "WebRTC", "PostgreSQL"],
     "highlights": [
-      "Led development of Edudiagno platform with real-time AI interview capabilities",
-      "Implemented speech-to-text and sentiment analysis for 1000+ interview sessions",
-      "Architected scalable backend handling 50+ concurrent video sessions"
+      "Led backend and AI development for EduDiagno, an AI-powered interview and assessment platform",
+      "Implemented real-time speech-to-text and sentiment analysis workflows used across 1000+ interviews",
+      "Architected a scalable backend capable of handling 50+ concurrent WebRTC video interview sessions",
+      "Designed assessment scoring logic and analytics pipelines enabling automated candidate evaluation"
     ]
   },
   {
@@ -30,38 +44,12 @@
     "role": "Data Analyst Intern",
     "location": "Bangalore, India",
     "start": "2023-06",
-    "end": "2023-11",
+    "end": "2023-08",
     "tools": ["Python", "PostGIS", "SQL", "QGIS", "Pandas"],
     "highlights": [
-      "Cleaned and standardized 10,000+ geospatial metadata records",
-      "Developed automated quality assurance scripts reducing errors by 40%",
-      "Collaborated with GIS team on spatial data visualization projects"
-    ]
-  },
-  {
-    "company": "Rooman Technologies",
-    "role": "Web Development Intern",
-    "location": "Bangalore, India",
-    "start": "2023-01",
-    "end": "2023-05",
-    "tools": ["React", "Node.js", "MongoDB", "Express", "REST APIs"],
-    "highlights": [
-      "Built responsive web applications for 5+ client projects",
-      "Implemented RESTful APIs and database schemas for e-learning platform",
-      "Optimized frontend performance achieving 90+ Lighthouse scores"
-    ]
-  },
-  {
-    "company": "Gully Groups",
-    "role": "UI/UX Design Intern",
-    "location": "Remote",
-    "start": "2022-08",
-    "end": "2022-12",
-    "tools": ["Figma", "Adobe XD", "Prototyping", "User Research"],
-    "highlights": [
-      "Designed user interfaces for mobile app with 10K+ downloads",
-      "Conducted user research and A/B testing to improve conversion by 25%",
-      "Created comprehensive design system and component library"
+      "Cleaned, standardised, and validated more than 10,000 geospatial metadata records",
+      "Developed automated QA scripts that reduced geospatial tagging errors by approximately 40%",
+      "Worked with the GIS team on spatial visualisation workflows for location intelligence solutions"
     ]
   }
 ]

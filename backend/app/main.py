@@ -12,6 +12,12 @@ import logging
 app = FastAPI(title="Shreyas Gowda Portfolio API", version="1.0.0")
 
 
+@app.get("/")
+async def root():
+    # Provide a lightweight 200 response at the root so platforms probing `/` get OK.
+    return {"status": "ok", "service": "portfolio-backend"}
+
+
 @app.on_event("startup")
 async def startup_checks():
     # Validate critical environment variables early and log helpful messages.
@@ -43,4 +49,12 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Prefer the PORT environment variable (Render and many PaaS provide it)
+    try:
+        port = int(os.getenv("PORT", "8000"))
+    except ValueError:
+        port = 8000
+
+    # Log the binding so platform health checks can pick it up in logs
+    logging.info("Starting Uvicorn on 0.0.0.0:%s", port)
+    uvicorn.run(app, host="0.0.0.0", port=port)

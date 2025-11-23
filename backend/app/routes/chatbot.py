@@ -1,68 +1,126 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from openai import OpenAI
 import os
 import logging
 from typing import List, Optional, Dict, Any
+import httpx
 
 router = APIRouter()
 
-# Lazy-open the OpenAI client to avoid import-time side effects and to ensure
-# environment variables (e.g. from .env) have been loaded before use.
-_client: OpenAI | None = None
 
+def _extract_text_from_gemini_response(data: Dict[str, Any]) -> str:
+    """Extract text from Gemini/Generative Language API responses.
 
-def get_openai_client() -> OpenAI:
-    global _client
-    if _client is None:
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            logging.error("OPENAI_API_KEY is not set in environment")
-            raise RuntimeError("OPENAI_API_KEY is not configured")
-        _client = OpenAI(api_key=api_key)
-    return _client
-
-
-def _extract_text_from_response(response) -> str:
-    """Robustly extract the assistant text from different OpenAI client response shapes.
-
-    Supports object-like and dict-like responses and falls back to stringifying the
-    whole response so the endpoint never returns None.
+    This function handles multiple response shapes returned by different
+    Gemini model versions (e.g. `candidates[].content.parts`, `message.content.parts`,
+    `output[].content.parts`, or simple string content).
     """
+
     try:
-        # Try attribute access first (OpenAI client objects)
-        choices = getattr(response, "choices", None)
-        if choices and len(choices) > 0:
-            first = choices[0]
-            # message.content (newer chat responses)
-            msg = getattr(first, "message", None)
-            if msg is not None:
-                content = getattr(msg, "content", None)
-                if content:
-                    return str(content)
+        # candidates (common modern shape)
+        candidates = data.get("candidates")
+        if isinstance(candidates, list) and len(candidates) > 0:
+            first = candidates[0]
 
-            # fallback: first.text
-            text = getattr(first, "text", None)
-            if text:
-                return str(text)
+            # content can be a plain string
+            content = first.get("content")
+            if isinstance(content, str):
+                return content
 
-        # If attribute access failed, try dict-like access
-        if isinstance(response, dict):
-            choices = response.get("choices") or []
-            if choices:
-                first = choices[0]
-                if isinstance(first, dict):
-                    msg = first.get("message") or {}
-                    if isinstance(msg, dict) and msg.get("content"):
-                        return str(msg.get("content"))
-                    if first.get("text"):
-                        return str(first.get("text"))
+            # content can be a dict with 'parts'
+            if isinstance(content, dict):
+                parts = content.get("parts") or content.get("content") or []
+                if isinstance(parts, list) and len(parts) > 0:
+                    texts: List[str] = []
+                    for p in parts:
+                        if isinstance(p, dict) and p.get("text"):
+                            texts.append(str(p.get("text")))
+                        elif isinstance(p, str):
+                            texts.append(p)
+                    if texts:
+                        return "".join(texts)
+                if isinstance(content.get("text"), str):
+                    return content.get("text")
 
-        # As a last resort stringify the response
-        return str(response)
+            # content can be a list of content blocks
+            if isinstance(content, list) and len(content) > 0:
+                c0 = content[0]
+                if isinstance(c0, dict) and c0.get("text"):
+                    return str(c0["text"])
+                if isinstance(c0, dict) and c0.get("parts"):
+                    parts = c0.get("parts")
+                    texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
+                    if texts:
+                        return "".join(texts)
+
+        # message path (older or alternate shapes)
+        msg = data.get("message")
+        if isinstance(msg, dict):
+            cont = msg.get("content")
+            if isinstance(cont, str):
+                return cont
+            if isinstance(cont, dict) and cont.get("parts"):
+                parts = cont.get("parts")
+                texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
+                if texts:
+                    return "".join(texts)
+            if isinstance(cont, list) and len(cont) > 0:
+                first_cont = cont[0]
+                if isinstance(first_cont, dict) and first_cont.get("text"):
+                    return str(first_cont.get("text"))
+                if isinstance(first_cont, dict) and first_cont.get("parts"):
+                    parts = first_cont.get("parts")
+                    texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
+                    if texts:
+                        return "".join(texts)
+
+        # output path
+        out = data.get("output")
+        if isinstance(out, list) and len(out) > 0:
+            o0 = out[0]
+            cont = o0.get("content") if isinstance(o0, dict) else None
+            if isinstance(cont, str):
+                return cont
+            if isinstance(cont, dict) and cont.get("parts"):
+                parts = cont.get("parts")
+                texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
+                if texts:
+                    return "".join(texts)
+            if isinstance(cont, list) and len(cont) > 0:
+                first_c = cont[0]
+                if isinstance(first_c, dict) and first_c.get("text"):
+                    return str(first_c.get("text"))
+                if isinstance(first_c, dict) and first_c.get("parts"):
+                    parts = first_c.get("parts")
+                    texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
+                    if texts:
+                        return "".join(texts)
+
+        # Deep fallback: find 'text' fields anywhere in the payload
+        def _deep_collect_text(obj: Any) -> List[str]:
+            texts: List[str] = []
+            if isinstance(obj, dict):
+                for k, v in obj.items():
+                    if k == "text" and isinstance(v, str):
+                        texts.append(v)
+                    else:
+                        texts.extend(_deep_collect_text(v))
+            elif isinstance(obj, list):
+                for item in obj:
+                    texts.extend(_deep_collect_text(item))
+            return texts
+
+        found_texts = _deep_collect_text(data)
+        if found_texts:
+            return "\n".join(found_texts[:5])
+
+        # final fallback
+        return str(data)
+
     except Exception:
-        logging.exception("Failed to extract text from OpenAI response")
-        return str(response)
+        logging.exception("Failed to extract text from Gemini response")
+        return str(data)
+
 
 class ChatMessage(BaseModel):
     message: str
@@ -70,8 +128,10 @@ class ChatMessage(BaseModel):
     # {"role": "user"|"assistant", "content": "..."}
     history: Optional[List[Dict[str, Any]]] = None
 
+
 class ChatResponse(BaseModel):
     response: str
+
 
 SYSTEM_PROMPT = """You are an AI assistant representing Shreyas Gowda B, a Data Science graduate student at the University of Glasgow.
 Your job is to answer questions about Shreyas in a friendly, helpful, concise, and professional manner.
@@ -269,58 +329,90 @@ SECTION 7 — OBJECTIVE
 Your mission is to present Shreyas as a capable, skilled, and well-rounded Data Science professional.
 Provide accurate, polished, and helpful information that reflects his academic journey, technical expertise, projects, and experience."""
 
+
 @router.post("", response_model=ChatResponse)
 async def chat(message: ChatMessage):
     try:
-        client = get_openai_client()
-
-        # Determine user input; treat special init token or empty input as a request
-        # for a short assistant greeting generated by the model.
         incoming = (message.message or "").strip()
         is_init = incoming == "__init__" or incoming == ""
 
         if is_init:
             user_input = (
-                "Please provide a short (1-2 sentence) assistant greeting that introduces Shreyas"
-                " and explains briefly how the assistant can help. Keep it friendly and concise."
+                "Please provide a short (1-2 sentence) assistant greeting that introduces Shreyas "
+                "and explains briefly how the assistant can help. Keep it friendly and concise."
             )
-            history_items = []
+            history_items: List[Dict[str, Any]] = []
         else:
             user_input = incoming
-            # Use provided history (if any). Expect history items in the shape
-            # [{role: 'user'|'assistant', content: '...'}]
             history_items = (message.history or [])
 
-        # Build messages list for the OpenAI chat API: start with the system prompt
-        oai_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        # Build a single text payload combining system prompt, history, and latest user input.
+        parts: List[str] = ["SYSTEM PROMPT:\n", SYSTEM_PROMPT, "\n\n"]
+        if history_items:
+            parts.append("CONVERSATION HISTORY:\n")
+            for item in history_items[-20:]:
+                role = item.get("role", "user")
+                speaker = "Assistant" if role in ("assistant", "bot") else "User"
+                content = item.get("content", "")
+                parts.append(f"{speaker}: {content}\n")
+            parts.append("\n")
 
-        # Append history (map roles if necessary), cap to the last 20 items
-        for item in history_items[-20:]:
-            role = item.get("role", "user")
-            mapped_role = "assistant" if role == "assistant" or role == "bot" else "user"
-            content = item.get("content", "")
-            if content:
-                oai_messages.append({"role": mapped_role, "content": str(content)})
+        parts.append(f"User: {user_input}\n")
+        combined_text = "\n".join(parts)
 
-        # Append the latest user input as the last message
-        oai_messages.append({"role": "user", "content": user_input})
-
-        logging.info("Received chat request; calling OpenAI (user input length=%d; history size=%d)",
-                     len(user_input), len(oai_messages))
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=oai_messages,
-            temperature=0.7,
-            max_tokens=500
+        # ✅ Gemini model + endpoint
+        model = (
+            os.getenv("GEMINI_MODEL")
+            or os.getenv("GOOGLE_GEMINI_MODEL")
+            or "gemini-2.0-flash"
         )
 
-        content = _extract_text_from_response(response)
-        logging.debug("OpenAI response extracted content: %s", content)
+
+        api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        if not api_key:
+            logging.error("GEMINI_API_KEY (or GOOGLE_API_KEY) is not set in environment")
+            raise RuntimeError("GEMINI_API_KEY is not configured")
+
+        url = (
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{model}:generateContent?key={api_key}"
+        )
+
+        payload = {
+            "contents": [
+                {
+                    "role": "user",
+                    "parts": [
+                        {"text": combined_text}
+                    ],
+                }
+            ],
+            "generationConfig": {
+                "temperature": 0.7,
+            },
+        }
+
+        logging.info(
+            "Received chat request; calling Gemini (model=%s, user_input_len=%d, history_size=%d)",
+            model,
+            len(user_input),
+            len(history_items),
+        )
+
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            resp = await client.post(url, json=payload)
+            if resp.status_code >= 400:
+                logging.error("Gemini API returned %s: %s", resp.status_code, resp.text)
+                raise Exception(f"Gemini API error: {resp.status_code}")
+            data = resp.json()
+
+        content = _extract_text_from_gemini_response(data)
+        logging.debug("Gemini response extracted content: %s", content)
 
         return ChatResponse(response=str(content))
+
     except RuntimeError as re:
         raise HTTPException(status_code=500, detail=str(re))
     except Exception as e:
-        logging.exception("Error while calling OpenAI chat API")
+        logging.exception("Error while calling Gemini chat API")
         raise HTTPException(status_code=500, detail=f"Error processing chat: {str(e)}")

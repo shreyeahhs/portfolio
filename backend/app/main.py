@@ -21,12 +21,12 @@ async def root():
 @app.on_event("startup")
 async def startup_checks():
     # Validate critical environment variables early and log helpful messages.
-    if not os.getenv("OPENAI_API_KEY"):
+    if not (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")):
         logging.warning(
-            "OPENAI_API_KEY not set. The chatbot endpoint will return 500 until it's configured."
+            "GEMINI_API_KEY (or GOOGLE_API_KEY) not set. The chatbot endpoint will return 500 until it's configured."
         )
     else:
-        logging.info("OPENAI_API_KEY found — chatbot ready.")
+        logging.info("GEMINI_API_KEY found — chatbot ready.")
 
 # CORS configuration
 app.add_middleware(

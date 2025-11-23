@@ -3,6 +3,6 @@ uvicorn[standard]
 pydantic
 pydantic-settings
 python-dotenv
-openai
 httpx
 email-validator
+google-genai

@@ -7,7 +7,7 @@ export const pinnedProjectsData: PinnedProject[] = [
     summary:
       "AI-powered interview and assessment platform built during Shreyas's internship at Technobeez. Features real-time speech recognition, sentiment analysis, and automated scoring. ~80% of the system was developed by Shreyas.",
     tags: ["AI/ML", "Full-Stack", "Real-time"],
-    tech: ["Python", "FastAPI", "React", "TypeScript", "WebRTC", "OpenAI", "PostgreSQL"],
+    tech: ["Python", "FastAPI", "React", "TypeScript", "WebRTC", "Gemini", "PostgreSQL"],
     links: {
       live: "https://edudiagno.com",
       repo: "",
@@ -20,7 +20,7 @@ export const pinnedProjectsData: PinnedProject[] = [
     summary:
       "Conversational AI event and venue planner built with React and FastAPI. Includes GPT-powered recommendations, live event data fetching, and a full chat-based planning workflow. Built for the GUTS × SAS Scotland Hackathon.",
     tags: ["AI/ML", "Full-Stack", "Conversational AI"],
-    tech: ["React", "TypeScript", "FastAPI", "Python", "OpenAI"],
+    tech: ["React", "TypeScript", "FastAPI", "Python", "Gemini"],
     links: {
       repo: "https://github.com/shreyeahhs/GlasLet-sgow",
     },
@@ -66,9 +66,9 @@ export const pinnedProjectsData: PinnedProject[] = [
     title: "YouTube AI Summarizer",
     slug: "youtube-summarizer",
     summary:
-      "NLP-based YouTube summarization system that extracts transcripts and generates structured summaries, chapters, and insights using GPT-based models.",
+      "NLP-based YouTube summarization system that extracts transcripts and generates structured summaries, chapters, and insights using Gemini-based models.",
     tags: ["AI/ML", "NLP"],
-    tech: ["Python", "FastAPI", "OpenAI API", "LangChain"],
+    tech: ["Python", "FastAPI", "Gemini API", "LangChain"],
     links: {
       repo: "https://github.com/shreyeahhs/YouTube-Video-Summarizer",
     },

@@ -5,7 +5,7 @@
     "summary": "Real-time AI-powered interview and assessment platform built during an internship at Technobeez. Shreyas developed ~80% of the system, including backend APIs, scoring logic, and AI-driven interview workflows.",
     "year": 2025,
     "tags": ["AI/ML", "Full-Stack", "Real-time"],
-    "tech": ["Python", "FastAPI", "React", "TypeScript", "WebRTC", "OpenAI", "PostgreSQL"],
+    "tech": ["Python", "FastAPI", "React", "TypeScript", "WebRTC", "Gemini", "PostgreSQL"],
     "featured": true,
     "links": {
       "live": "https://www.edudiagno.com"
@@ -17,7 +17,7 @@
     "summary": "AI-driven event and venue recommendation app with GPT-powered conversational mode, live data-fetching, and a modern React + FastAPI architecture. Built for the GUTS × SAS Scotland Hackathon.",
     "year": 2024,
     "tags": ["AI/ML", "Full-Stack", "Conversational AI"],
-    "tech": ["React", "TypeScript", "FastAPI", "Python", "OpenAI"],
+    "tech": ["React", "TypeScript", "FastAPI", "Python", "Gemini"],
     "featured": true,
     "links": {
       "repo": "https://github.com/shreyeahhs/GlasLet-sgow"
@@ -65,7 +65,7 @@
     "summary": "NLP-powered tool that extracts transcripts and generates structured summaries, chapter breakdowns, and key insights for long-form YouTube videos.",
     "year": 2024,
     "tags": ["AI/ML", "NLP"],
-    "tech": ["Python", "OpenAI API", "LangChain", "FastAPI"],
+    "tech": ["Python", "Gemini API", "LangChain", "FastAPI"],
     "featured": false,
     "links": {
       "repo": "https://github.com/shreyeahhs/YouTube-Video-Summarizer"

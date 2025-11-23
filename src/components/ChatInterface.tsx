@@ -107,7 +107,7 @@ const ChatInterface = ({ isOpen, onClose }: ChatInterfaceProps) => {
 
     try {
       const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
-      // Build a compact history payload for the backend: map local roles to OpenAI roles
+      // Build a compact history payload for the backend: map local roles to assistant roles
       const historyPayload = (isInit
         ? []
         : [...messages, ...(userMessage ? [userMessage] : [])].map((m) => ({

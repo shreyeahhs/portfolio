@@ -31,7 +31,7 @@
     "location": "Remote",
     "start": "2025-01",
     "end": "2025-09",
-    "tools": ["FastAPI", "React", "OpenAI", "WebRTC", "PostgreSQL"],
+    "tools": ["FastAPI", "React", "Gemini", "WebRTC", "PostgreSQL"],
     "highlights": [
       "Led backend and AI development for EduDiagno, an AI-powered interview and assessment platform",
       "Implemented real-time speech-to-text and sentiment analysis workflows used across 1000+ interviews",

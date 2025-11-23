@@ -286,7 +286,10 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
         break;
       
       case 'contact':
-        addOutput('Email: shreyas@example.com\nGitHub: github.com/shreyas-gowda\nLinkedIn: linkedin.com/in/shreyas-gowda', 'normal');
+        addOutput(
+          'Email: gowdashreyas364@gmail.com\nGitHub: https://github.com/shreyeahhs\nLinkedIn: https://www.linkedin.com/in/shreyas-gowda-5316b51b1/\nInstagram: https://www.instagram.com/shreyeahhs/',
+          'normal'
+        );
         setShowContactCTA(true);
         break;
       

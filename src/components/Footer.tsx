@@ -1,4 +1,4 @@
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { Github, Linkedin, Instagram } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -13,7 +13,7 @@ const Footer = () => {
           
           <div className="flex items-center gap-4">
             <a
-              href="https://github.com/shreyas-gowda"
+              href="https://github.com/shreyeahhs"
               target="_blank"
               rel="noopener noreferrer"
               className="text-text-muted hover:text-accent transition-colors"
@@ -22,7 +22,7 @@ const Footer = () => {
               <Github size={20} />
             </a>
             <a
-              href="https://linkedin.com/in/shreyas-gowda"
+              href="https://www.linkedin.com/in/shreyas-gowda-5316b51b1/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-text-muted hover:text-accent transition-colors"
@@ -31,13 +31,13 @@ const Footer = () => {
               <Linkedin size={20} />
             </a>
             <a
-              href="https://twitter.com/shreyas_gowda"
+              href="https://www.instagram.com/shreyeahhs/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-text-muted hover:text-accent transition-colors"
-              aria-label="Twitter"
+              aria-label="Instagram"
             >
-              <Twitter size={20} />
+              <Instagram size={20} />
             </a>
           </div>
         </div>

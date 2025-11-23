@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Mail, FileText, Github, Linkedin, Twitter, Send, Copy, Check } from "lucide-react";
+import { MapPin, Mail, FileText, Github, Linkedin, Instagram, Send, Copy, Check } from "lucide-react";
 import WindowCard from "@/components/WindowCard";
 import GlassCard from "@/components/GlassCard";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
@@ -100,18 +100,18 @@ const Contact = () => {
   const socialLinks = [
     {
       name: "GitHub",
-      url: "https://github.com/shreyas-gowda",
+      url: "https://github.com/shreyeahhs",
       icon: Github,
     },
     {
       name: "LinkedIn",
-      url: "https://linkedin.com/in/shreyas-gowda",
+      url: "https://www.linkedin.com/in/shreyas-gowda-5316b51b1/",
       icon: Linkedin,
     },
     {
-      name: "Twitter",
-      url: "https://twitter.com/shreyas_gowda",
-      icon: Twitter,
+      name: "Instagram",
+      url: "https://www.instagram.com/shreyeahhs/",
+      icon: Instagram,
     },
   ];
 

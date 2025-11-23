@@ -296,32 +296,7 @@ const ChatInterface = ({ isOpen, onClose }: ChatInterfaceProps) => {
                         <Copy className="w-3 h-3 text-text-muted" />
                       </button>
                     </div>
-                    {message.error && (
-                      <button
-                        className="absolute -bottom-6 right-0 text-xs text-[hsl(var(--accent))] hover:underline flex items-center gap-1"
-                        onClick={() => {
-                          // Retry: find the previous user message content
-                          const idx = messages.findIndex((m) => m.id === message.id);
-                          let userContent = "";
-                          if (idx > 0) {
-                            // look backwards for the nearest user message
-                            for (let i = idx - 1; i >= 0; i--) {
-                              if (messages[i].role === "user") {
-                                userContent = messages[i].content;
-                                break;
-                              }
-                            }
-                          }
-                          if (userContent) {
-                            // sendMessage will append a new user message and attempt again
-                            sendMessage(userContent);
-                          }
-                        }}
-                      >
-                        <RotateCcw className="w-3 h-3" />
-                        Retry
-                      </button>
-                    )}
+                    {/* retry button removed — errors are now displayed but retry handled manually by resending */}
                   </div>
                 </div>
               ))}

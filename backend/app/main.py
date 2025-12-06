@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from app.routes import projects, internships, contact, chatbot
 import logging
+import asyncio
+import httpx
 
 app = FastAPI(title="Shreyas Gowda Portfolio API", version="1.0.0")
 
@@ -16,6 +18,31 @@ app = FastAPI(title="Shreyas Gowda Portfolio API", version="1.0.0")
 async def root():
     # Provide a lightweight 200 response at the root so platforms probing `/` get OK.
     return {"status": "ok", "service": "portfolio-backend"}
+
+
+async def keep_alive_task():
+    """Background task that pings the health endpoint every 14 minutes to prevent service inactivity."""
+    await asyncio.sleep(60)  # Wait 1 minute after startup before first ping
+    
+    while True:
+        try:
+            # Get the service URL from environment or construct from PORT
+            service_url = os.getenv("SERVICE_URL")
+            if not service_url:
+                port = os.getenv("PORT", "8000")
+                service_url = f"http://localhost:{port}"
+            
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(f"{service_url}/api/health")
+                if response.status_code == 200:
+                    logging.info("Keep-alive ping successful")
+                else:
+                    logging.warning(f"Keep-alive ping returned status {response.status_code}")
+        except Exception as e:
+            logging.error(f"Keep-alive ping failed: {e}")
+        
+        # Wait 14 minutes before next ping
+        await asyncio.sleep(14 * 60)
 
 
 @app.on_event("startup")
@@ -27,6 +54,10 @@ async def startup_checks():
         )
     else:
         logging.info("GEMINI_API_KEY found — chatbot ready.")
+    
+    # Start the keep-alive background task
+    asyncio.create_task(keep_alive_task())
+    logging.info("Keep-alive task started — will ping every 14 minutes")
 
 # CORS configuration
 app.add_middleware(

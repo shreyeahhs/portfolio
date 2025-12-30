@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import os
 import logging
 from typing import List, Optional, Dict, Any
-import httpx
+from google import genai
 
 router = APIRouter()
 
@@ -360,37 +360,17 @@ async def chat(message: ChatMessage):
         parts.append(f"User: {user_input}\n")
         combined_text = "\n".join(parts)
 
-        # ✅ Gemini model + endpoint
+        # ✅ Gemini model using Google GenAI SDK
         model = (
             os.getenv("GEMINI_MODEL")
             or os.getenv("GOOGLE_GEMINI_MODEL")
-            or "gemini-2.0-flash"
+            or "gemini-2.5-flash"
         )
-
 
         api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
         if not api_key:
             logging.error("GEMINI_API_KEY (or GOOGLE_API_KEY) is not set in environment")
             raise RuntimeError("GEMINI_API_KEY is not configured")
-
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{model}:generateContent?key={api_key}"
-        )
-
-        payload = {
-            "contents": [
-                {
-                    "role": "user",
-                    "parts": [
-                        {"text": combined_text}
-                    ],
-                }
-            ],
-            "generationConfig": {
-                "temperature": 0.7,
-            },
-        }
 
         logging.info(
             "Received chat request; calling Gemini (model=%s, user_input_len=%d, history_size=%d)",
@@ -399,15 +379,17 @@ async def chat(message: ChatMessage):
             len(history_items),
         )
 
-        async with httpx.AsyncClient(timeout=20.0) as client:
-            resp = await client.post(url, json=payload)
-            if resp.status_code >= 400:
-                logging.error("Gemini API returned %s: %s", resp.status_code, resp.text)
-                raise Exception(f"Gemini API error: {resp.status_code}")
-            data = resp.json()
+        # Initialize the Gemini API client
+        client = genai.Client(api_key=api_key)
+        
+        # Generate content using the Google GenAI SDK
+        response = client.models.generate_content(
+            model=model,
+            contents=combined_text
+        )
 
-        content = _extract_text_from_gemini_response(data)
-        logging.debug("Gemini response extracted content: %s", content)
+        content = response.text
+        logging.debug("Gemini response content: %s", content)
 
         return ChatResponse(response=str(content))
 

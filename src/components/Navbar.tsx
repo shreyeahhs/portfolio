@@ -22,6 +22,7 @@ const NavBar = () => {
     { to: "/projects", label: "Projects" },
     { to: "/experience", label: "Experience" },
     { to: "/about", label: "About" },
+    { to: "/dashboards", label: "Dashboards" },
     { to: "/contact", label: "Contact" },
   ];
 
@@ -33,7 +34,7 @@ const NavBar = () => {
       animate={{ y: 0 }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled && "glass shadow-lg"
+        (isScrolled || isMobileMenuOpen) ? "glass shadow-lg bg-bg/95 backdrop-blur-md" : "bg-transparent"
       )}
     >
       <div className="container mx-auto px-4">

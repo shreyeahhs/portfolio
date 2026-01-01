@@ -21,6 +21,7 @@ import Experience from "./pages/Experience";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import Dashboards from "./pages/Dashboards";
 
 const queryClient = new QueryClient();
 
@@ -40,9 +41,9 @@ const AppContent = () => {
   // Global keyboard shortcuts for console
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.key === '/' || e.key === '~') && 
-          document.activeElement?.tagName !== 'INPUT' && 
-          document.activeElement?.tagName !== 'TEXTAREA') {
+      if ((e.key === '/' || e.key === '~') &&
+        document.activeElement?.tagName !== 'INPUT' &&
+        document.activeElement?.tagName !== 'TEXTAREA') {
         e.preventDefault();
         setConsoleOpen(true);
       }
@@ -59,7 +60,10 @@ const AppContent = () => {
       <ParallaxLayers />
       <ParticleBackground />
       <NavBar />
-      <CommandLine />
+      <NavBar />
+      <div className="hidden md:block">
+        <CommandLine />
+      </div>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />
@@ -67,13 +71,18 @@ const AppContent = () => {
         <Route path="/internships" element={<Experience />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/dashboards" element={<Dashboards />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
-      <SystemStatusFooter />
+      <div className="hidden md:block">
+        <SystemStatusFooter />
+      </div>
       <ChatBot />
       <ASCIIConsole isOpen={consoleOpen} onClose={() => setConsoleOpen(false)} />
-      <ConsoleDiscovery onOpenConsole={() => setConsoleOpen(true)} />
+      <div className="hidden md:block">
+        <ConsoleDiscovery onOpenConsole={() => setConsoleOpen(true)} />
+      </div>
     </>
   );
 };

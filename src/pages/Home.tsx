@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import WindowCard from "@/components/WindowCard";
 import GlassCard from "@/components/GlassCard";
 import Badge from "@/components/Badge";
+import SkillsShowcase from "@/components/SkillsShowcase";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import projectsData from "@/data/projects.json";
 import { Project } from "@/types/Project";
@@ -11,12 +12,6 @@ import { Project } from "@/types/Project";
 const Home = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
   const featuredProjects = projectsData.filter((p: Project) => p.featured).slice(0, 3);
-
-  const skills = [
-    "Python", "TypeScript", "React", "FastAPI",
-    "SQL", "PostgreSQL", "AWS", "Docker",
-    "Power BI", "DAX", "Data Modeling"
-  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -49,11 +44,17 @@ const Home = () => {
           {/* Hero Section - Terminal Window */}
           <motion.section variants={itemVariants} className="max-w-4xl mx-auto">
             <WindowCard title="terminal.sh">
-              <div className="space-y-6">
+              <div className="space-y-10">
                 <div>
+                  <p className="terminal-prompt text-sm mb-4">$ ./render_avatar.sh</p>
+                  <img
+                    src="/avatar.png"
+                    alt="Profile"
+                    className="w-32 h-auto md:w-48 md:h-auto object-contain mx-auto mb-8 block"
+                  />
                   <p className="terminal-prompt text-sm mb-2">$ whoami</p>
                   <h1 className="text-4xl md:text-6xl font-bold mb-2">
-                    Shreyas Gowda B
+                    Shreyas Gowda
                   </h1>
                   <p className="text-text-muted text-lg">
                     MSc Data Science — University of Glasgow
@@ -70,15 +71,11 @@ const Home = () => {
                 </div>
 
                 <div>
-                  <p className="terminal-prompt text-sm mb-3">$ ls ./skills</p>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.map((skill) => (
-                      <Badge key={skill}>{skill}</Badge>
-                    ))}
-                  </div>
+                  <p className="terminal-prompt text-sm mb-3 text-accent/80">$ ./show_skills.sh</p>
+                  <SkillsShowcase />
                 </div>
 
-                <div className="flex flex-wrap gap-4 pt-4">
+                <div className="flex flex-wrap gap-4 pt-4 border-t border-border-color/30">
                   <Link to="/projects">
                     <button className="glass px-6 py-3 font-mono text-accent hover:bg-accent-muted transition-all flex items-center gap-2 group">
                       View Projects()

@@ -26,7 +26,7 @@ const ChatInterface = ({ isOpen, onClose }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<Message[]>([
     // Start with no messages — the initial assistant greeting will be fetched from the backend
   ]);
-  
+
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -75,7 +75,7 @@ const ChatInterface = ({ isOpen, onClose }: ChatInterfaceProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  
+
 
   const handleSend = async () => {
     await sendMessage();
@@ -111,9 +111,9 @@ const ChatInterface = ({ isOpen, onClose }: ChatInterfaceProps) => {
       const historyPayload = (isInit
         ? []
         : [...messages, ...(userMessage ? [userMessage] : [])].map((m) => ({
-            role: m.role === "bot" ? "assistant" : "user",
-            content: m.content,
-          }))
+          role: m.role === "bot" ? "assistant" : "user",
+          content: m.content,
+        }))
       ).slice(-20); // keep the last 20 messages to limit request size
 
       const res = await fetch(`${API_BASE}/api/chat`, {
@@ -208,22 +208,22 @@ const ChatInterface = ({ isOpen, onClose }: ChatInterfaceProps) => {
           duration: prefersReducedMotion ? 0.1 : 0.2,
         }}
         className={cn(
-            "fixed z-50 glass overflow-hidden shadow-2xl flex flex-col",
-            "md:right-8 right-4",
-            "md:w-[400px] w-auto",
-            "md:h-[640px] h-[70vh]",
-            "md:max-h-[72vh] max-h-[85vh]",
-            "md:min-h-[440px]",
-            "transition-all duration-300"
-          )}
-          style={{
-            bottom: 'calc(32px + 12px + env(safe-area-inset-bottom, 0px))',
-            // position the panel on the same side as the draggable button
-            ...(opensOnRight ? { right: '24px' } : { left: '24px' }),
-            // Ensure the panel doesn't collapse to zero width on small viewports
-            minWidth: '320px',
-            maxWidth: '90vw',
-          }}
+          "fixed z-50 glass overflow-hidden shadow-2xl flex flex-col",
+          "md:right-8 right-4",
+          "md:w-[400px] w-auto",
+          "md:h-[640px] h-[70vh]",
+          "md:max-h-[72vh] max-h-[85vh]",
+          "md:min-h-[440px]",
+          "transition-all duration-300"
+        )}
+        style={{
+          bottom: 'calc(32px + 12px + env(safe-area-inset-bottom, 0px))',
+          // position the panel on the same side as the draggable button
+          ...(opensOnRight ? { right: '24px' } : { left: '24px' }),
+          // Ensure the panel doesn't collapse to zero width on small viewports
+          minWidth: '320px',
+          maxWidth: '90vw',
+        }}
       >
         {/* Header with traffic lights */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(var(--border-color))] bg-panel/40">
@@ -246,135 +246,135 @@ const ChatInterface = ({ isOpen, onClose }: ChatInterfaceProps) => {
           </div>
         </div>
 
-            {/* Messages area */}
-            <div 
-              ref={messagesEndRef}
-                className="flex-1 min-h-0 overflow-y-auto p-4 space-y-2 relative chat-messages chat-scrollbar"
-              style={{
-                paddingBottom: 'calc(32px + 12px + env(safe-area-inset-bottom, 0px))',
-              }}
-            >
-              {/* Removed sticky top gradient (caused visible bar) */}
+        {/* Messages area */}
+        <div
+          ref={messagesEndRef}
+          className="flex-1 min-h-0 overflow-y-auto p-4 space-y-2 relative chat-messages chat-scrollbar"
+          style={{
+            paddingBottom: 'calc(32px + 12px + env(safe-area-inset-bottom, 0px))',
+          }}
+        >
+          {/* Removed sticky top gradient (caused visible bar) */}
 
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={cn(
-                    "flex gap-3",
-                    message.role === "user" ? "justify-end" : "justify-start"
-                  )}
-                >
-                  <div
-                    data-message-id={message.id}
-                    className={cn(
-                      "max-w-[85%] rounded-xl p-2 relative group",
-                      message.role === "user"
-                        ? "bg-[hsl(var(--accent))]/20 border border-[hsl(var(--accent))]/40 text-text-strong"
-                        : "bg-panel/60 text-text-strong",
-                      message.error && "border-[hsl(var(--destructive))]/40"
-                    )}
-                  >
-                    <div
-                      className="text-sm leading-tight font-mono whitespace-pre-wrap markdown-content"
-                      // Render sanitized HTML from Markdown. We sanitize to avoid XSS.
-                      dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(marked.parse(message.content || "")),
-                      }}
-                    />
-                    <div className="flex items-center justify-between mt-1 gap-2">
-                      <span className="text-xs text-text-subtle">
-                        {message.timestamp.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                      <button
-                        onClick={() => handleCopy(message.content)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded"
-                        aria-label="Copy message"
-                      >
-                        <Copy className="w-3 h-3 text-text-muted" />
-                      </button>
-                    </div>
-                    {/* retry button removed — errors are now displayed but retry handled manually by resending */}
-                  </div>
-                </div>
-              ))}
-
-              {isTyping && (
-                <div className="flex gap-3 justify-start">
-                  <div className="bg-panel/60 border border-white/10 rounded-xl p-3">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 rounded-full bg-text-muted animate-pulse" />
-                      <div
-                        className="w-2 h-2 rounded-full bg-text-muted animate-pulse"
-                        style={{ animationDelay: "0.2s" }}
-                      />
-                      <div
-                        className="w-2 h-2 rounded-full bg-text-muted animate-pulse"
-                        style={{ animationDelay: "0.4s" }}
-                      />
-                    </div>
-                  </div>
-                </div>
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={cn(
+                "flex gap-3",
+                message.role === "user" ? "justify-end" : "justify-start"
               )}
-
-              {/* removed stray end marker to avoid layout artifacts */}
-            </div>
-
-            {/* Composer (no top border to avoid visible divider) */}
-            <div className="p-4 bg-panel/30">
-              <div className="flex items-center gap-2.5">
-                <textarea
-                  ref={textareaRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Type a message... (Shift+Enter for newline)"
-                  rows={1}
-                  className="flex-1 resize-none outline-none"
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    minHeight: '44px',
-                    maxHeight: '160px',
-                    lineHeight: '1.5',
-                    padding: '10px 12px',
-                    font: '14px/1.5 "Inter", system-ui, sans-serif',
-                    color: 'rgba(230, 230, 230, 0.92)',
-                    background: 'rgba(10, 14, 20, 0.5)',
-                    border: '1.5px solid rgba(52, 211, 153, 0.65)',
-                    borderRadius: '14px',
-                    verticalAlign: 'middle',
-                  }}
-                  onInput={(e) => {
-                    const target = e.target as HTMLTextAreaElement;
-                    target.style.height = "auto";
-                    target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
+            >
+              <div
+                data-message-id={message.id}
+                className={cn(
+                  "max-w-[85%] rounded-xl p-2 relative group",
+                  message.role === "user"
+                    ? "bg-[hsl(var(--accent))]/20 border border-[hsl(var(--accent))]/40 text-text-strong"
+                    : "bg-panel/60 text-text-strong",
+                  message.error && "border-[hsl(var(--destructive))]/40"
+                )}
+              >
+                <div
+                  className="text-sm leading-tight font-mono whitespace-pre-wrap markdown-content [&_p]:mb-0"
+                  // Render sanitized HTML from Markdown. We sanitize to avoid XSS.
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(marked.parse(message.content || "")),
                   }}
                 />
-                <button
-                  onClick={handleSend}
-                  disabled={!input.trim()}
-                  aria-label="Send message"
-                  className="transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{
-                    width: '44px',
-                    height: '44px',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '12px',
-                    background: '#16a34a',
-                    color: '#0b0f14',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    boxShadow: '0 6px 16px rgba(0, 0, 0, 0.35)',
-                  }}
-                >
-                  <Send className="w-4 h-4" />
-                </button>
+                <div className="flex items-center justify-between mt-0.5 gap-2">
+                  <span className="text-xs text-text-subtle">
+                    {message.timestamp.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                  <button
+                    onClick={() => handleCopy(message.content)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded"
+                    aria-label="Copy message"
+                  >
+                    <Copy className="w-3 h-3 text-text-muted" />
+                  </button>
+                </div>
+                {/* retry button removed — errors are now displayed but retry handled manually by resending */}
               </div>
             </div>
+          ))}
+
+          {isTyping && (
+            <div className="flex gap-3 justify-start">
+              <div className="bg-panel/60 border border-white/10 rounded-xl p-3">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 rounded-full bg-text-muted animate-pulse" />
+                  <div
+                    className="w-2 h-2 rounded-full bg-text-muted animate-pulse"
+                    style={{ animationDelay: "0.2s" }}
+                  />
+                  <div
+                    className="w-2 h-2 rounded-full bg-text-muted animate-pulse"
+                    style={{ animationDelay: "0.4s" }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* removed stray end marker to avoid layout artifacts */}
+        </div>
+
+        {/* Composer (no top border to avoid visible divider) */}
+        <div className="p-4 bg-panel/30">
+          <div className="flex items-center gap-2.5">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type a message... (Shift+Enter for newline)"
+              rows={1}
+              className="flex-1 resize-none outline-none"
+              style={{
+                display: 'block',
+                width: '100%',
+                minHeight: '44px',
+                maxHeight: '160px',
+                lineHeight: '1.5',
+                padding: '10px 12px',
+                font: '14px/1.5 "Inter", system-ui, sans-serif',
+                color: 'rgba(230, 230, 230, 0.92)',
+                background: 'rgba(10, 14, 20, 0.5)',
+                border: '1.5px solid rgba(52, 211, 153, 0.65)',
+                borderRadius: '14px',
+                verticalAlign: 'middle',
+              }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = "auto";
+                target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
+              }}
+            />
+            <button
+              onClick={handleSend}
+              disabled={!input.trim()}
+              aria-label="Send message"
+              className="transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                width: '44px',
+                height: '44px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '12px',
+                background: '#16a34a',
+                color: '#0b0f14',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                boxShadow: '0 6px 16px rgba(0, 0, 0, 0.35)',
+              }}
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </motion.div>
     </AnimatePresence>
   );

@@ -251,6 +251,22 @@ Forecasts revenue, competitor substitution, market share changes, and delay impa
 
 Uses synthetic but industry-grounded datasets
 
+Hospital Patient Experience Survey Analytics
+
+Power BI dashboard analyzing patient experience across multiple hospitals
+
+Focuses on physical/environmental needs and treatment effectiveness
+
+Comparative and exploratory analysis using sample NHS-style data
+
+SEN Pupils Analysis
+
+Power BI study of Special Educational Needs (SEN) in England
+
+Reveals structural patterns, inequalities, and PRU risk factors
+
+Highlights educational support challenges and demographic disparities
+
 SECTION 4 — EXPERIENCE (CLEAN AND UPDATED)
 
 Publicis Sapient — Sustainability & Data Analyst Intern

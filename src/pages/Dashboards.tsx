@@ -41,6 +41,24 @@ const Dashboards = () => {
                         />
                     </motion.div>
 
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.15 }}
+                        className="md:col-span-1 lg:col-span-1"
+                    >
+                        <DashboardCard
+                            title="Hospital Patient Analytics"
+                            description="Exploratory and comparative analysis of hospital patient experience survey data.
+                            
+                            Focuses on physical/environmental needs and treatment effectiveness across multiple hospitals."
+                            tags={["Healthcare", "Patient Experience", "Public Sector", "Power BI"]}
+                            imageSrc="/pbix screenshots/Hospital-Stats.png"
+                            pbixLink="/pbix/Hospital-Survey.pbix"
+                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Hospital-analysis"
+                        />
+                    </motion.div>
+
                     {/* Placeholders */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}

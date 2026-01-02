@@ -13,8 +13,9 @@ const Home = () => {
   const featuredProjects = projectsData.filter((p: Project) => p.featured).slice(0, 3);
 
   const skills = [
-    "Python", "TypeScript", "React", "FastAPI", 
-    "SQL", "PostgreSQL", "AWS", "Docker"
+    "Python", "TypeScript", "React", "FastAPI",
+    "SQL", "PostgreSQL", "AWS", "Docker",
+    "Power BI", "DAX", "Data Modeling"
   ];
 
   const containerVariants = {
@@ -62,8 +63,8 @@ const Home = () => {
                 <div>
                   <p className="terminal-prompt text-sm mb-3">$ cat bio.txt</p>
                   <p className="text-text-muted leading-relaxed">
-                    Full-stack developer & data scientist building intelligent systems 
-                    with Python, TypeScript, and modern web technologies. Experienced in 
+                    Full-stack developer & data scientist building intelligent systems
+                    with Python, TypeScript, and modern web technologies. Experienced in
                     AI/ML pipelines, real-time applications, and scalable backend architecture.
                   </p>
                 </div>
@@ -100,8 +101,8 @@ const Home = () => {
               <h2 className="text-3xl font-bold terminal-prompt">
                 $ ls ./featured-projects
               </h2>
-              <Link 
-                to="/projects" 
+              <Link
+                to="/projects"
                 className="text-accent hover:text-accent-glow font-mono text-sm flex items-center gap-2 group"
               >
                 View all

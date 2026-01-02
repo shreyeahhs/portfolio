@@ -4,8 +4,22 @@
     "slug": "edudiagno",
     "summary": "Real-time AI-powered interview and assessment platform built during an internship at Technobeez. Shreyas developed ~80% of the system, including backend APIs, scoring logic, and AI-driven interview workflows.",
     "year": 2025,
-    "tags": ["AI/ML", "Full-Stack", "Real-time"],
-    "tech": ["Python", "FastAPI", "React", "TypeScript", "WebRTC", "Gemini", "PostgreSQL"],
+    "tags": [
+      "AI/ML",
+      "Full-Stack",
+      "Real-time"
+    ],
+    "tech": [
+      "Python",
+      "FastAPI",
+      "React",
+      "TypeScript",
+      "WebRTC",
+      "Gemini",
+      "PostgreSQL",
+      "AWS",
+      "Docker"
+    ],
     "featured": true,
     "links": {
       "live": "https://www.edudiagno.com"
@@ -16,8 +30,18 @@
     "slug": "nightout-planner",
     "summary": "AI-driven event and venue recommendation app with GPT-powered conversational mode, live data-fetching, and a modern React + FastAPI architecture. Built for the GUTS × SAS Scotland Hackathon.",
     "year": 2024,
-    "tags": ["AI/ML", "Full-Stack", "Conversational AI"],
-    "tech": ["React", "TypeScript", "FastAPI", "Python", "Gemini"],
+    "tags": [
+      "AI/ML",
+      "Full-Stack",
+      "Conversational AI"
+    ],
+    "tech": [
+      "React",
+      "TypeScript",
+      "FastAPI",
+      "Python",
+      "Gemini"
+    ],
     "featured": true,
     "links": {
       "repo": "https://github.com/shreyeahhs/GlasLet-sgow"
@@ -28,8 +52,17 @@
     "slug": "glasgow-snow-prediction",
     "summary": "35-year climatology analysis using Open-Meteo archives to predict snow likelihood in Glasgow with Logistic Regression, Random Forest, and first-snow-date distribution modelling.",
     "year": 2024,
-    "tags": ["Machine Learning", "Time-Series", "Climate Analysis"],
-    "tech": ["Python", "Pandas", "Scikit-Learn", "Matplotlib"],
+    "tags": [
+      "Machine Learning",
+      "Time-Series",
+      "Climate Analysis"
+    ],
+    "tech": [
+      "Python",
+      "Pandas",
+      "Scikit-Learn",
+      "Matplotlib"
+    ],
     "featured": true,
     "links": {
       "repo": "https://github.com/shreyeahhs/Glasgow-Snow-Prediction"
@@ -40,8 +73,18 @@
     "slug": "twin-engine-dt",
     "summary": "Digital twin dashboard for predicting Remaining Useful Life (RUL) of turbofan engines using NASA CMAPSS dataset. Includes confidence intervals, feature explanations, and a React interface.",
     "year": 2024,
-    "tags": ["Digital Twin", "Predictive Maintenance", "Machine Learning"],
-    "tech": ["React", "TypeScript", "FastAPI", "Python", "Scikit-Learn"],
+    "tags": [
+      "Digital Twin",
+      "Predictive Maintenance",
+      "Machine Learning"
+    ],
+    "tech": [
+      "React",
+      "TypeScript",
+      "FastAPI",
+      "Python",
+      "Scikit-Learn"
+    ],
     "featured": true,
     "links": {
       "repo": "https://github.com/shreyeahhs/digital-twin-jet-engine"
@@ -52,8 +95,17 @@
     "slug": "jlr-ev-delay",
     "summary": "Strategic simulation modelling EV launch delays for Jaguar Land Rover. Includes revenue impact, competitor substitution modelling, scenario analysis, and visualisation outputs.",
     "year": 2025,
-    "tags": ["Simulation", "Automotive", "Data Analysis"],
-    "tech": ["Python", "Pandas", "Matplotlib", "YAML"],
+    "tags": [
+      "Simulation",
+      "Automotive",
+      "Data Analysis"
+    ],
+    "tech": [
+      "Python",
+      "Pandas",
+      "Matplotlib",
+      "YAML"
+    ],
     "featured": true,
     "links": {
       "repo": "https://github.com/shreyeahhs/jlr-launch-delay-analysis"
@@ -64,11 +116,59 @@
     "slug": "youtube-summarizer",
     "summary": "NLP-powered tool that extracts transcripts and generates structured summaries, chapter breakdowns, and key insights for long-form YouTube videos.",
     "year": 2024,
-    "tags": ["AI/ML", "NLP"],
-    "tech": ["Python", "Gemini API", "LangChain", "FastAPI"],
+    "tags": [
+      "AI/ML",
+      "NLP"
+    ],
+    "tech": [
+      "Python",
+      "Gemini API",
+      "LangChain",
+      "FastAPI"
+    ],
     "featured": false,
     "links": {
       "repo": "https://github.com/shreyeahhs/YouTube-Video-Summarizer"
+    }
+  },
+  {
+    "title": "Hospital Patient Analytics",
+    "slug": "hospital-patient-analytics",
+    "summary": "Exploratory analysis of patient experience data across hospitals, focusing on physical/environmental needs and treatment effectiveness.",
+    "year": 2024,
+    "tags": [
+      "Data Analysis",
+      "Power BI",
+      "Healthcare"
+    ],
+    "tech": [
+      "Power BI",
+      "DAX",
+      "Data Modeling"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Hospital-analysis"
+    }
+  },
+  {
+    "title": "SEN Pupils Analysis",
+    "slug": "sen-pupils-analysis",
+    "summary": "In-depth Power BI study of Special Educational Needs (SEN) in England, revealing structural inequalities and support gaps.",
+    "year": 2024,
+    "tags": [
+      "Data Analysis",
+      "Power BI",
+      "Education"
+    ],
+    "tech": [
+      "Power BI",
+      "DAX",
+      "Data Modeling"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/UK-SEN-analysis"
     }
   }
 ]

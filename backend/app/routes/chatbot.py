@@ -183,11 +183,17 @@ PostgreSQL
 
 Docker
 
+AWS
+
 Git
 
 Data Science Skills:
 
 Machine Learning
+
+Power BI
+
+DAX
 
 Data Analysis
 

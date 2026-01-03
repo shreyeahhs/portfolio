@@ -59,11 +59,27 @@ const Dashboards = () => {
                         />
                     </motion.div>
 
-                    {/* Placeholders */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                        <DashboardCard
+                            title="Sales Performance & Profitability"
+                            description="Comprehensive analysis of retail sales and net profit distribution. 
+                            
+                            Examines market-level performance, seasonal trends, and margin efficiency across product categories."
+                            tags={["Sales", "CRM", "Profitability", "Power BI"]}
+                            imageSrc="/pbix screenshots/Sales-Stats.png"
+                            pbixLink="/pbix/Sales Performance Analysis.pbix"
+                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Sales-analysis"
+                        />
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.25 }}
                     >
                         <PlaceholderCard
                             description="Healthcare resource allocation dashboard focusing on regional disparities and funding efficiency."
@@ -74,16 +90,6 @@ const Dashboards = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
-                    >
-                        <PlaceholderCard
-                            description="Retail sales performance dashboard with cohort analysis and seasonal forecasting models."
-                        />
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
                     >
                         <PlaceholderCard
                             description="Sustainable energy consumption tracker monitoring renewable adoption across major cities."

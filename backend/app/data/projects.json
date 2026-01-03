@@ -2,67 +2,193 @@
   {
     "title": "Edudiagno — AI Interview Platform",
     "slug": "edudiagno",
-    "summary": "Real-time AI-powered interview system with speech recognition, sentiment analysis, and instant feedback. Built with FastAPI backend and React frontend.",
-    "year": 2024,
-    "tags": ["AI/ML", "Full-Stack", "Real-time"],
-    "tech": ["Python", "FastAPI", "React", "TypeScript", "WebRTC", "Transformers"],
+    "summary": "Real-time AI-powered interview and assessment platform built during an internship at Technobeez. Shreyas developed ~80% of the system, including backend APIs, scoring logic, and AI-driven interview workflows.",
+    "year": 2025,
+    "tags": [
+      "AI/ML",
+      "Full-Stack",
+      "Real-time"
+    ],
+    "tech": [
+      "Python",
+      "FastAPI",
+      "React",
+      "TypeScript",
+      "WebRTC",
+      "Gemini",
+      "PostgreSQL",
+      "AWS",
+      "Docker"
+    ],
     "featured": true,
     "links": {
-      "repo": "https://github.com/shreyeahhs"
+      "live": "https://www.edudiagno.com"
     }
   },
   {
-    "title": "GraphGeo Metadata Cleanup",
-    "slug": "graphgeo-metadata",
-    "summary": "Geospatial metadata standardization tool processing 10K+ records. Automated data quality checks and normalization pipelines.",
+    "title": "NightOut Planner — AI Event Recommendation System",
+    "slug": "nightout-planner",
+    "summary": "AI-driven event and venue recommendation app with GPT-powered conversational mode, live data-fetching, and a modern React + FastAPI architecture. Built for the GUTS × SAS Scotland Hackathon.",
     "year": 2024,
-    "tags": ["Data Engineering", "Geospatial"],
-    "tech": ["Python", "Pandas", "PostGIS", "SQL"],
+    "tags": [
+      "AI/ML",
+      "Full-Stack",
+      "Conversational AI"
+    ],
+    "tech": [
+      "React",
+      "TypeScript",
+      "FastAPI",
+      "Python",
+      "Gemini"
+    ],
     "featured": true,
-    "links": {}
+    "links": {
+      "repo": "https://github.com/shreyeahhs/GlasLet-sgow"
+    }
+  },
+  {
+    "title": "Glasgow Snow Prediction — 35-Year Climate & ML Analysis",
+    "slug": "glasgow-snow-prediction",
+    "summary": "35-year climatology analysis using Open-Meteo archives to predict snow likelihood in Glasgow with Logistic Regression, Random Forest, and first-snow-date distribution modelling.",
+    "year": 2024,
+    "tags": [
+      "Machine Learning",
+      "Time-Series",
+      "Climate Analysis"
+    ],
+    "tech": [
+      "Python",
+      "Pandas",
+      "Scikit-Learn",
+      "Matplotlib"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/Glasgow-Snow-Prediction"
+    }
+  },
+  {
+    "title": "Twin Engine — Jet Engine Digital Twin (RUL Predictor)",
+    "slug": "twin-engine-dt",
+    "summary": "Digital twin dashboard for predicting Remaining Useful Life (RUL) of turbofan engines using NASA CMAPSS dataset. Includes confidence intervals, feature explanations, and a React interface.",
+    "year": 2024,
+    "tags": [
+      "Digital Twin",
+      "Predictive Maintenance",
+      "Machine Learning"
+    ],
+    "tech": [
+      "React",
+      "TypeScript",
+      "FastAPI",
+      "Python",
+      "Scikit-Learn"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/digital-twin-jet-engine"
+    }
+  },
+  {
+    "title": "JLR EV Launch Delay Impact Simulation",
+    "slug": "jlr-ev-delay",
+    "summary": "Strategic simulation modelling EV launch delays for Jaguar Land Rover. Includes revenue impact, competitor substitution modelling, scenario analysis, and visualisation outputs.",
+    "year": 2025,
+    "tags": [
+      "Simulation",
+      "Automotive",
+      "Data Analysis"
+    ],
+    "tech": [
+      "Python",
+      "Pandas",
+      "Matplotlib",
+      "YAML"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/jlr-launch-delay-analysis"
+    }
   },
   {
     "title": "YouTube AI Summarizer",
     "slug": "youtube-summarizer",
-    "summary": "Extract and summarize YouTube video transcripts using NLP. Generate key insights and chapter breakdowns automatically.",
+    "summary": "NLP-powered tool that extracts transcripts and generates structured summaries, chapter breakdowns, and key insights for long-form YouTube videos.",
     "year": 2024,
-    "tags": ["AI/ML", "NLP"],
-    "tech": ["Python", "OpenAI API", "LangChain", "FastAPI"],
-    "featured": true,
+    "tags": [
+      "AI/ML",
+      "NLP"
+    ],
+    "tech": [
+      "Python",
+      "Gemini API",
+      "LangChain",
+      "FastAPI"
+    ],
+    "featured": false,
     "links": {
-      "live": "https://yt-summarizer.example.com"
+      "repo": "https://github.com/shreyeahhs/YouTube-Video-Summarizer"
     }
   },
   {
-    "title": "Buzzlink Marketplace",
-    "slug": "buzzlink-marketplace",
-    "summary": "E-commerce platform with real-time inventory management, payment integration, and admin dashboard.",
-    "year": 2023,
-    "tags": ["Full-Stack", "E-commerce"],
-    "tech": ["React", "Node.js", "MongoDB", "Stripe", "Redis"],
-    "featured": false,
-    "links": {}
-  },
-  {
-    "title": "Smart Campus Navigation",
-    "slug": "campus-nav",
-    "summary": "Indoor navigation system using Bluetooth beacons and pathfinding algorithms for university campus.",
-    "year": 2023,
-    "tags": ["Mobile", "IoT"],
-    "tech": ["React Native", "BLE", "Firebase", "A* Algorithm"],
-    "featured": false,
-    "links": {}
-  },
-  {
-    "title": "Expense Tracker Pro",
-    "slug": "expense-tracker",
-    "summary": "Personal finance management app with budget forecasting, category analysis, and export capabilities.",
-    "year": 2023,
-    "tags": ["Full-Stack", "Finance"],
-    "tech": ["Vue.js", "Python", "PostgreSQL", "Chart.js"],
-    "featured": false,
+    "title": "Hospital Patient Analytics",
+    "slug": "hospital-patient-analytics",
+    "summary": "Exploratory analysis of patient experience data across hospitals, focusing on physical/environmental needs and treatment effectiveness.",
+    "year": 2024,
+    "tags": [
+      "Data Analysis",
+      "Power BI",
+      "Healthcare"
+    ],
+    "tech": [
+      "Power BI",
+      "DAX",
+      "Data Modeling"
+    ],
+    "featured": true,
     "links": {
-      "live": "https://expense-tracker.example.com"
+      "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Hospital-analysis"
+    }
+  },
+  {
+    "title": "SEN Pupils Analysis",
+    "slug": "sen-pupils-analysis",
+    "summary": "In-depth Power BI study of Special Educational Needs (SEN) in England, revealing structural inequalities and support gaps.",
+    "year": 2024,
+    "tags": [
+      "Data Analysis",
+      "Power BI",
+      "Education"
+    ],
+    "tech": [
+      "Power BI",
+      "DAX",
+      "Data Modeling"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/UK-SEN-analysis"
+    }
+  },
+  {
+    "title": "Sales Performance & Profitability Dashboard",
+    "slug": "sales-performance-dashboard",
+    "summary": "Comprehensive analytical study of retail sales and net profit distribution across global markets, regions, and product categories.",
+    "year": 2024,
+    "tags": [
+      "Data Analysis",
+      "Power BI",
+      "Sales"
+    ],
+    "tech": [
+      "Power BI",
+      "DAX",
+      "Data Modeling"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Sales-analysis"
     }
   }
 ]

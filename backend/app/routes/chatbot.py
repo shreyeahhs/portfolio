@@ -265,6 +265,16 @@ Focuses on physical/environmental needs and treatment effectiveness
 
 Comparative and exploratory analysis using sample NHS-style data
 
+Sales Performance & Profitability Dashboard
+
+Power BI dashboard examining retail sales performance and net profit distribution
+
+Focuses on global markets, regional trends, seasonal profit patterns, and margin efficiency
+
+Reveals category-level dominance (e.g., Technology) and geographic value concentration
+
+Provides an interactive tool for executive-level and detailed analytical exploration
+
 SEN Pupils Analysis
 
 Power BI study of Special Educational Needs (SEN) in England

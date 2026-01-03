@@ -12,14 +12,14 @@ const About = () => {
       institution: "University of Glasgow",
       location: "Glasgow, UK",
       period: "2025 - 2026",
-      details: "Focus on machine learning, big data analytics, and statistical modeling.",
+      details: "Advanced postgraduate training in machine learning, statistical modelling, and scalable data analysis, with strong emphasis on applied problem-solving, programming, and real-world data projects. Includes an independent MSc dissertation focused on delivering actionable insights using modern data science techniques.",
     },
     {
       degree: "BE Artificial Intelligence & Data Science",
       institution: "Sri Dharmasthala Manjunatheshwara Institute of Technology",
-      location: "Bangalore, India",
+      location: "Karnataka, India",
       period: "2021 - 2025",
-      details: "Specialized in AI algorithms, deep learning, and data engineering pipelines.",
+      details: "Engineering degree focused on building intelligent, data-driven systems, covering machine learning, deep learning, data analytics, and software engineering. Strong hands-on exposure through projects involving model development, data pipelines, and applied AI solutions.",
     },
   ];
 
@@ -56,7 +56,7 @@ const About = () => {
               $ whoami --verbose
             </h1>
             <p className="text-text-muted text-lg">
-              Data scientist and full-stack developer passionate about building intelligent, 
+              Data scientist and full-stack developer passionate about building intelligent,
               scalable systems.
             </p>
           </motion.div>
@@ -69,17 +69,17 @@ const About = () => {
               </h2>
               <div className="space-y-4 text-text-muted leading-relaxed">
                 <p>
-                  I'm a graduate student pursuing my MSc in Data Science at the University of Glasgow, 
-                  with a strong foundation in artificial intelligence and software engineering. 
+                  I'm a graduate student pursuing my MSc in Data Science at the University of Glasgow,
+                  with a strong foundation in artificial intelligence and software engineering.
                   My journey in tech spans full-stack development, machine learning, and data engineering.
                 </p>
                 <p>
-                  I've worked on diverse projects ranging from real-time AI interview platforms to 
-                  geospatial metadata analysis systems. I enjoy solving complex problems with clean, 
+                  I've worked on diverse projects ranging from real-time AI interview platforms to
+                  geospatial metadata analysis systems. I enjoy solving complex problems with clean,
                   efficient code and scalable architectures.
                 </p>
                 <p>
-                  When I'm not writing code, I'm usually exploring new AI breakthroughs, contributing to 
+                  When I'm not writing code, I'm usually exploring new AI breakthroughs, contributing to
                   open-source tools, or analysing the most random, unnecessary datasets for fun.
                 </p>
               </div>
@@ -112,10 +112,16 @@ const About = () => {
 
           {/* Resume Download */}
           <motion.div variants={itemVariants}>
-            <button className="glass px-6 py-3 font-mono text-accent hover:bg-accent-muted transition-all flex items-center gap-2 group w-full md:w-auto justify-center">
-              <Download size={18} className="group-hover:translate-y-0.5 transition-transform" />
-              Download Resume (PDF)
-            </button>
+            <a
+              href="/Shreyas Gowda Resume.pdf"
+              download="Shreyas_Gowda_Resume.pdf"
+              className="block w-full md:w-auto"
+            >
+              <button className="glass px-6 py-3 font-mono text-accent hover:bg-accent-muted transition-all flex items-center gap-2 group w-full md:w-auto justify-center">
+                <Download size={18} className="group-hover:translate-y-0.5 transition-transform" />
+                Download Resume (PDF)
+              </button>
+            </a>
           </motion.div>
         </motion.div>
       </div>

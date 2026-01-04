@@ -8,7 +8,8 @@ import SkillsShowcase from "@/components/SkillsShowcase";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import projectsData from "@/data/projects.json";
 import { Project } from "@/types/Project";
-import Avatar3D from "@/components/Avatar3D";
+// import Avatar3D from "@/components/Avatar3D";
+import { Box } from "lucide-react";
 
 const Home = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -48,7 +49,21 @@ const Home = () => {
               <div className="space-y-10">
                 <div>
                   <p className="terminal-prompt text-sm mb-4">$ ./render_avatar.sh</p>
-                  <Avatar3D />
+                  <div className="relative group mb-4">
+                    <img
+                      src="/avatar.png"
+                      alt="Avatar"
+                      className="w-full max-w-[300px] md:max-w-[400px] mx-auto object-contain"
+                    />
+                    <div className="absolute bottom-4 right-4 md:right-1/4">
+                      <Link to="/avatar-3d">
+                        <button className="glass px-4 py-2 text-xs font-mono text-accent hover:bg-accent-muted transition-all flex items-center gap-2 group/btn">
+                          <Box size={14} className="group-hover/btn:rotate-12 transition-transform" />
+                          See in 3D
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
                   <p className="terminal-prompt text-sm mb-2">$ whoami</p>
                   <h1 className="text-4xl md:text-6xl font-bold mb-2">
                     Shreyas Gowda

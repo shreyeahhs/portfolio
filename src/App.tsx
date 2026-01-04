@@ -22,6 +22,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Dashboards from "./pages/Dashboards";
+import Avatar3DPage from "./pages/Avatar3DPage";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ const AppContent = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboards" element={<Dashboards />} />
+        <Route path="/avatar-3d" element={<Avatar3DPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

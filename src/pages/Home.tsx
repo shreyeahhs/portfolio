@@ -8,6 +8,7 @@ import SkillsShowcase from "@/components/SkillsShowcase";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import projectsData from "@/data/projects.json";
 import { Project } from "@/types/Project";
+import Avatar3D from "@/components/Avatar3D";
 
 const Home = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -47,11 +48,7 @@ const Home = () => {
               <div className="space-y-10">
                 <div>
                   <p className="terminal-prompt text-sm mb-4">$ ./render_avatar.sh</p>
-                  <img
-                    src="/avatar.png"
-                    alt="Profile"
-                    className="w-32 h-auto md:w-48 md:h-auto object-contain mx-auto mb-8 block"
-                  />
+                  <Avatar3D />
                   <p className="terminal-prompt text-sm mb-2">$ whoami</p>
                   <h1 className="text-4xl md:text-6xl font-bold mb-2">
                     Shreyas Gowda

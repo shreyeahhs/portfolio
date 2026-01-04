@@ -81,8 +81,13 @@ const Dashboards = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.25 }}
                     >
-                        <PlaceholderCard
-                            description="Healthcare resource allocation dashboard focusing on regional disparities and funding efficiency."
+                        <DashboardCard
+                            title="Pokemon Statistics Analysis"
+                            description="An interactive analysis of Pokémon statistics across multiple generations. Explores type distributions, base stats, and legendary status."
+                            tags={["Gaming", "Data Analysis", "Statistics", "Power BI"]}
+                            imageSrc="/pbix screenshots/Pokemon-stats.png"
+                            pbixLink="/pbix/pokemon.pbix"
+                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/pokemon-analysis"
                         />
                     </motion.div>
 

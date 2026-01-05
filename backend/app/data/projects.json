@@ -190,5 +190,45 @@
     "links": {
       "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Sales-analysis"
     }
+  },
+  {
+    "title": "Anime Ratings & Trends Dashboard",
+    "slug": "anime-ratings-dashboard",
+    "summary": "An interactive exploration of anime industry trends, ratings distribution, and genre popularity over time using Power BI.",
+    "year": 2024,
+    "tags": [
+      "Data Analysis",
+      "Power BI",
+      "Entertainment"
+    ],
+    "tech": [
+      "Power BI",
+      "DAX",
+      "Data Modeling"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Anime-stats"
+    }
+  },
+  {
+    "title": "Pokemon Statistics Analysis",
+    "slug": "pokemon-stats-analysis",
+    "summary": "An interactive analysis of Pokémon statistics across multiple generations, exploring type distributions, base stats, and legendary status.",
+    "year": 2024,
+    "tags": [
+      "Data Analysis",
+      "Power BI",
+      "Gaming"
+    ],
+    "tech": [
+      "Power BI",
+      "DAX",
+      "Data Modeling"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Pokemon-stats"
+    }
   }
 ]

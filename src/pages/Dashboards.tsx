@@ -96,6 +96,23 @@ const Dashboards = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
                     >
+                        <DashboardCard
+                            title="Anime Ratings & Trends"
+                            description="An interactive exploration of anime industry trends, ratings distribution, and genre popularity over time. 
+                            
+                            Analyzes seasonal shifts and viewer engagement across thousands of titles."
+                            tags={["Entertainment", "Trends", "Data Analysis", "Power BI"]}
+                            imageSrc="/pbix screenshots/Anime-Stats.png"
+                            pbixLink="/pbix/Anime Ratings & Trends Dashboard.pbix"
+                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Anime-stats"
+                        />
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.35 }}
+                    >
                         <PlaceholderCard
                             description="Sustainable energy consumption tracker monitoring renewable adoption across major cities."
                         />

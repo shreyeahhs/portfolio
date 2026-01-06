@@ -1,9 +1,93 @@
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Github } from "lucide-react";
+import { Github, Search } from "lucide-react";
 import { DashboardCard } from "@/components/DashboardCard";
 import { PlaceholderCard } from "@/components/PlaceholderCard";
 
+interface Dashboard {
+    title: string;
+    description: string;
+    tags: string[];
+    imageSrc: string;
+    pbixLink: string;
+    githubLink: string;
+}
+
+const dashboardsData: Dashboard[] = [
+    {
+        title: "SEN Pupils Analysis",
+        description: "An in-depth study of Special Educational Needs (SEN) in England. \n\nReveals structural patterns, inequalities, and PRU risk factors affecting SEN support.",
+        tags: ["Education", "Inequality", "Public Sector"],
+        imageSrc: "/pbix screenshots/UK-SEN.png",
+        pbixLink: "/pbix/UK-SEN-Stats.pbix",
+        githubLink: "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/UK-SEN-analysis"
+    },
+    {
+        title: "Hospital Patient Analytics",
+        description: "Exploratory and comparative analysis of hospital patient experience survey data.\n\nFocuses on physical/environmental needs and treatment effectiveness across multiple hospitals.",
+        tags: ["Healthcare", "Patient Experience", "Public Sector"],
+        imageSrc: "/pbix screenshots/Hospital-Stats.png",
+        pbixLink: "/pbix/Hospital-Survey.pbix",
+        githubLink: "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Hospital-analysis"
+    },
+    {
+        title: "Sales Performance & Profitability",
+        description: "Comprehensive analysis of retail sales and net profit distribution. \n\nExamines market-level performance, seasonal trends, and margin efficiency across product categories.",
+        tags: ["Sales", "CRM", "Profitability"],
+        imageSrc: "/pbix screenshots/Sales-Stats.png",
+        pbixLink: "/pbix/Sales Performance Analysis.pbix",
+        githubLink: "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Sales-analysis"
+    },
+    {
+        title: "Pokemon Statistics Analysis",
+        description: "An interactive analysis of Pokémon statistics across multiple generations. Explores type distributions, base stats, and legendary status.",
+        tags: ["Gaming", "Statistics"],
+        imageSrc: "/pbix screenshots/Pokemon-stats.png",
+        pbixLink: "/pbix/pokemon.pbix",
+        githubLink: "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Pokemon-stats"
+    },
+    {
+        title: "Anime Ratings & Trends",
+        description: "An interactive exploration of anime industry trends, ratings distribution, and genre popularity over time. \n\nAnalyzes seasonal shifts and viewer engagement across thousands of titles.",
+        tags: ["Entertainment", "Trends"],
+        imageSrc: "/pbix screenshots/Anime-Stats.png",
+        pbixLink: "/pbix/Anime Ratings & Trends Dashboard.pbix",
+        githubLink: "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Anime-analysis"
+    },
+    {
+        title: "Harry Potter Statistics Analysis",
+        description: "A comprehensive analytical study of the Harry Potter film series. \n\nUncovers patterns in financial performance (budget vs profit), narrative structure (chapters), and character prominence through dialogue distribution.",
+        tags: ["Entertainment", "Financial analysis", "Narrative Analytics"],
+        imageSrc: "/pbix screenshots/Harry-Stats.png",
+        pbixLink: "/pbix/Harry Porter.pbix",
+        githubLink: "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/HarryPotter-stats"
+    }
+];
+
 const Dashboards = () => {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+    const allTags = useMemo(() => {
+        const tags = new Set<string>();
+        dashboardsData.forEach((dashboard) => {
+            dashboard.tags.forEach((tag) => tags.add(tag));
+        });
+        return Array.from(tags).sort();
+    }, []);
+
+    const filteredDashboards = useMemo(() => {
+        return dashboardsData.filter((dashboard) => {
+            const matchesSearch =
+                dashboard.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                dashboard.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+            const matchesTag = !selectedTag || dashboard.tags.includes(selectedTag);
+
+            return matchesSearch && matchesTag;
+        });
+    }, [searchTerm, selectedTag]);
+
     return (
         <div className="min-h-screen pt-24 pb-16 relative z-10">
             <div className="container mx-auto px-4">
@@ -16,119 +100,73 @@ const Dashboards = () => {
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 font-mono">
                         <span className="text-accent">&gt;</span> dashboard_gallery
                     </h1>
-                    <p className="text-lg text-text-muted leading-relaxed">
+                    <p className="text-lg text-text-muted leading-relaxed mb-8">
                         Open-access Power BI dashboards exploring public sector data, education metrics, and economic trends.
                         All dashboards are free to explore, download, and use under the MIT License.
                     </p>
+
+                    {/* Search and Filter */}
+                    <div className="space-y-4">
+                        <div className="glass p-4 flex items-center gap-3">
+                            <Search className="text-accent" size={20} />
+                            <input
+                                type="text"
+                                placeholder="Search dashboards..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="flex-1 bg-transparent outline-none text-text-strong placeholder:text-text-subtle font-mono"
+                            />
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                            <button
+                                onClick={() => setSelectedTag(null)}
+                                className={`px-3 py-1 rounded-full text-xs font-mono transition-colors ${!selectedTag
+                                    ? "bg-accent text-bg"
+                                    : "bg-panel border border-border-color text-text-muted hover:text-text-strong"
+                                    }`}
+                            >
+                                All
+                            </button>
+                            {allTags.map((tag) => (
+                                <button
+                                    key={tag}
+                                    onClick={() => setSelectedTag(tag)}
+                                    className={`px-3 py-1 rounded-full text-xs font-mono transition-colors ${selectedTag === tag
+                                        ? "bg-accent text-bg"
+                                        : "bg-panel border border-border-color text-text-muted hover:text-text-strong"
+                                        }`}
+                                >
+                                    {tag}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="md:col-span-2 lg:col-span-1"
-                    >
-                        <DashboardCard
-                            title="SEN Pupils Analysis"
-                            description="An in-depth study of Special Educational Needs (SEN) in England. 
-              
-              Reveals structural patterns, inequalities, and PRU risk factors affecting SEN support."
-                            tags={["Education", "Inequality", "Public Sector", "Power BI"]}
-                            imageSrc="/pbix screenshots/UK-SEN.png"
-                            pbixLink="/pbix/UK-SEN-Stats.pbix"
-                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/UK-SEN-analysis"
-                        />
-                    </motion.div>
+                    {filteredDashboards.map((dashboard, index) => (
+                        <motion.div
+                            key={dashboard.title}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: index * 0.05 }}
+                        >
+                            <DashboardCard
+                                title={dashboard.title}
+                                description={dashboard.description}
+                                tags={dashboard.tags}
+                                imageSrc={dashboard.imageSrc}
+                                pbixLink={dashboard.pbixLink}
+                                githubLink={dashboard.githubLink}
+                            />
+                        </motion.div>
+                    ))}
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.15 }}
-                        className="md:col-span-1 lg:col-span-1"
-                    >
-                        <DashboardCard
-                            title="Hospital Patient Analytics"
-                            description="Exploratory and comparative analysis of hospital patient experience survey data.
-                            
-                            Focuses on physical/environmental needs and treatment effectiveness across multiple hospitals."
-                            tags={["Healthcare", "Patient Experience", "Public Sector", "Power BI"]}
-                            imageSrc="/pbix screenshots/Hospital-Stats.png"
-                            pbixLink="/pbix/Hospital-Survey.pbix"
-                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Hospital-analysis"
-                        />
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        <DashboardCard
-                            title="Sales Performance & Profitability"
-                            description="Comprehensive analysis of retail sales and net profit distribution. 
-                            
-                            Examines market-level performance, seasonal trends, and margin efficiency across product categories."
-                            tags={["Sales", "CRM", "Profitability", "Power BI"]}
-                            imageSrc="/pbix screenshots/Sales-Stats.png"
-                            pbixLink="/pbix/Sales Performance Analysis.pbix"
-                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Sales-analysis"
-                        />
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.25 }}
-                    >
-                        <DashboardCard
-                            title="Pokemon Statistics Analysis"
-                            description="An interactive analysis of Pokémon statistics across multiple generations. Explores type distributions, base stats, and legendary status."
-                            tags={["Gaming", "Data Analysis", "Statistics", "Power BI"]}
-                            imageSrc="/pbix screenshots/Pokemon-stats.png"
-                            pbixLink="/pbix/pokemon.pbix"
-                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Pokemon-stats"
-                        />
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                    >
-                        <DashboardCard
-                            title="Anime Ratings & Trends"
-                            description="An interactive exploration of anime industry trends, ratings distribution, and genre popularity over time. 
-                            
-                            Analyzes seasonal shifts and viewer engagement across thousands of titles."
-                            tags={["Entertainment", "Trends", "Data Analysis", "Power BI"]}
-                            imageSrc="/pbix screenshots/Anime-Stats.png"
-                            pbixLink="/pbix/Anime Ratings & Trends Dashboard.pbix"
-                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Anime-analysis"
-                        />
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.35 }}
-                    >
-                        <DashboardCard
-                            title="Harry Potter Statistics Analysis"
-                            description="A comprehensive analytical study of the Harry Potter film series. 
-                            
-                            Uncovers patterns in financial performance (budget vs profit), narrative structure (chapters), and character prominence through dialogue distribution."
-                            tags={["Entertainment", "Financial analysis", "Narrative Analytics", "Power BI"]}
-                            imageSrc="/pbix screenshots/Harry-Stats.png"
-                            pbixLink="/pbix/Harry Porter.pbix"
-                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/HarryPotter-stats"
-                        />
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
+                        transition={{ duration: 0.5, delay: filteredDashboards.length * 0.05 }}
                     >
                         <PlaceholderCard
                             description="Sustainable energy consumption tracker monitoring renewable adoption across major cities."

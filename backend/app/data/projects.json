@@ -137,9 +137,9 @@
     "summary": "Exploratory analysis of patient experience data across hospitals, focusing on physical/environmental needs and treatment effectiveness.",
     "year": 2024,
     "tags": [
-      "Data Analysis",
-      "Power BI",
-      "Healthcare"
+      "Healthcare",
+      "Patient Experience",
+      "Public Sector"
     ],
     "tech": [
       "Power BI",
@@ -157,9 +157,9 @@
     "summary": "In-depth Power BI study of Special Educational Needs (SEN) in England, revealing structural inequalities and support gaps.",
     "year": 2024,
     "tags": [
-      "Data Analysis",
-      "Power BI",
-      "Education"
+      "Education",
+      "Inequality",
+      "Public Sector"
     ],
     "tech": [
       "Power BI",
@@ -177,9 +177,9 @@
     "summary": "Comprehensive analytical study of retail sales and net profit distribution across global markets, regions, and product categories.",
     "year": 2024,
     "tags": [
-      "Data Analysis",
-      "Power BI",
-      "Sales"
+      "Sales",
+      "CRM",
+      "Profitability"
     ],
     "tech": [
       "Power BI",
@@ -217,9 +217,8 @@
     "summary": "An interactive analysis of Pokémon statistics across multiple generations, exploring type distributions, base stats, and legendary status.",
     "year": 2024,
     "tags": [
-      "Data Analysis",
-      "Power BI",
-      "Gaming"
+      "Gaming",
+      "Statistics"
     ],
     "tech": [
       "Power BI",

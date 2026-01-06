@@ -19,10 +19,11 @@ const NavBar = () => {
 
   const navLinks = [
     { to: "/", label: "Home" },
-    { to: "/projects", label: "Projects" },
     { to: "/experience", label: "Experience" },
-    { to: "/about", label: "About" },
+    { to: "/projects", label: "Projects" },
     { to: "/dashboards", label: "Dashboards" },
+    { to: "/hobbies", label: "Hobbies" },
+    { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
   ];
 

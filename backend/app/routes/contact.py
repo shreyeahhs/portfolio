@@ -73,7 +73,17 @@ async def submit_contact(contact: ContactMessage):
 
     # Notify site owner with visitor info
     owner_subject = f"New contact from {contact.name}"
-    owner_html = f"<h3>New contact submission</h3><p><strong>Name:</strong> {contact.name}</p><p><strong>Email:</strong> {contact.email}</p><p><strong>Message:</strong><br/>{contact.message}</p>"
+    owner_html = f"""
+    <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
+        <h2 style="color: #3b82f6; margin-top: 0;">New Contact Form Submission</h2>
+        <p><strong>Name:</strong> {contact.name}</p>
+        <p><strong>Email:</strong> <a href="mailto:{contact.email}">{contact.email}</a></p>
+        <div style="background: #f4f4f4; padding: 15px; border-radius: 4px; margin-top: 20px;">
+            <strong>Message:</strong><br/>
+            {contact.message.replace('\\n', '<br/>')}
+        </div>
+    </div>
+    """
     owner_text = f"New contact submission\nName: {contact.name}\nEmail: {contact.email}\nMessage:\n{contact.message}"
 
     owner_sent = False
@@ -86,18 +96,50 @@ async def submit_contact(contact: ContactMessage):
     # Send thank-you email to visitor (from your CONTACT_FROM_EMAIL)
     visitor_subject = "Thanks for contacting Shreyas"
 
-    # Randomized visitor thank-you templates (user-provided). We'll replace {{name}} and {{message}}.
-    visitor_templates = [
-        "Hi {{name}},\nThanks for reaching out! I’ve passed your message to Shreyas and he’ll reply as soon as he stops pretending to take a “short break.”\n\nYour message:\n{{message}}\n\nShreyas’s virtual assistant",
-        "Hey {{name}},\nThanks for the message! Shreyas has been notified and will get back to you soon. I promise I nudged him gently… maybe twice.\n\nYour message:\n{{message}}\n\nShreyas’s virtual assistant",
-        "Hi {{name}},\nThanks for getting in touch! I’ve already poked Shreyas about your message and he’ll respond shortly (assuming he’s not buried under code).\n\nYour message:\n{{message}}\n\nShreyas’s virtual assistant",
-        "Hello {{name}},\nYour message has been delivered to Shreyas. He’ll get back to you soon unless he’s debugging something dramatic, in which case… still soon.\n\nYour message:\n{{message}}\n\nShreyas’s virtual assistant",
-    ]
-
-    chosen = random.choice(visitor_templates)
-    visitor_text = chosen.replace("{{name}}", contact.name).replace("{{message}}", contact.message)
-    # Simple HTML version: escape then convert newlines to <br/>
-    visitor_html = _html.escape(visitor_text).replace("\n", "<br/>")
+    # Professional HTML Template for Visitor
+    visitor_html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }}
+            .container {{ max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #ffffff; }}
+            .header {{ background-color: #3b82f6; color: white; padding: 20px; border-radius: 8px 8px 0 0; text-align: center; }}
+            .content {{ padding: 20px; }}
+            .message-box {{ background-color: #f9fafb; padding: 15px; border-left: 4px solid #3b82f6; margin: 20px 0; font-style: italic; }}
+            .footer {{ padding: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; text-align: center; }}
+            .social-links a {{ color: #3b82f6; text-decoration: none; margin: 0 10px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Thanks for reaching out!</h1>
+            </div>
+            <div class="content">
+                <p>Hi <strong>{contact.name}</strong>,</p>
+                <p>I've received your message and will get back to you as soon as possible. It's great to connect!</p>
+                
+                <p>Here's a copy of what you sent:</p>
+                <div class="message-box">
+                    "{contact.message}"
+                </div>
+                
+                <p>Best regards,<br/><strong>Shreyas Gowda</strong></p>
+            </div>
+            <div class="footer">
+                <p>This is an automated confirmation from my portfolio contact form.</p>
+                <div class="social-links">
+                    <a href="https://github.com/shreyeahhs">GitHub</a> |
+                    <a href="https://www.linkedin.com/in/shreyas-gowda-5316b51b1/">LinkedIn</a> |
+                    <a href="https://www.instagram.com/shreyeahhs/">Instagram</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    visitor_text = f"Hi {contact.name},\n\nThanks for reaching out! I've received your message and will get back to you as soon as possible.\n\nYour message:\n{contact.message}\n\nBest regards,\nShreyas Gowda"
 
     visitor_sent = await _send_brevo_email(contact.email, contact.name, visitor_subject, visitor_html, visitor_text)
 

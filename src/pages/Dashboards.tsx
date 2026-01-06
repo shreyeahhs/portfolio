@@ -121,7 +121,7 @@ const Dashboards = () => {
                             tags={["Entertainment", "Financial analysis", "Narrative Analytics", "Power BI"]}
                             imageSrc="/pbix screenshots/Harry-Stats.png"
                             pbixLink="/pbix/Harry Porter.pbix"
-                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Harry-Potter-analysis"
+                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/HarryPotter-stats"
                         />
                     </motion.div>
 

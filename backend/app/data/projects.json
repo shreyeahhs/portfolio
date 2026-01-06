@@ -230,5 +230,25 @@
     "links": {
       "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Pokemon-stats"
     }
+  },
+  {
+    "title": "Harry Potter Statistics Analysis",
+    "slug": "harry-potter-stats",
+    "summary": "An analytical study of the Harry Potter film series using Power BI, uncovering patterns in financial performance, narrative density, and character prominence across the franchise.",
+    "year": 2024,
+    "tags": [
+      "Data Analysis",
+      "Power BI",
+      "Entertainment"
+    ],
+    "tech": [
+      "Power BI",
+      "DAX",
+      "Data Modeling"
+    ],
+    "featured": true,
+    "links": {
+      "repo": "https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Harry-Potter-analysis"
+    }
   }
 ]

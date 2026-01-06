@@ -113,6 +113,23 @@ const Dashboards = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.35 }}
                     >
+                        <DashboardCard
+                            title="Harry Potter Statistics Analysis"
+                            description="A comprehensive analytical study of the Harry Potter film series. 
+                            
+                            Uncovers patterns in financial performance (budget vs profit), narrative structure (chapters), and character prominence through dialogue distribution."
+                            tags={["Entertainment", "Financial analysis", "Narrative Analytics", "Power BI"]}
+                            imageSrc="/pbix screenshots/Harry-Stats.png"
+                            pbixLink="/pbix/Harry Porter.pbix"
+                            githubLink="https://github.com/shreyeahhs/powerbi-projects-showcase/tree/main/Harry-Potter-analysis"
+                        />
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                    >
                         <PlaceholderCard
                             description="Sustainable energy consumption tracker monitoring renewable adoption across major cities."
                         />

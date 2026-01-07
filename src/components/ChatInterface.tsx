@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import TrafficLights from "./TrafficLights";
+import { API_ENDPOINTS } from "@/lib/api";
 
 interface Message {
   id: string;
@@ -106,17 +107,16 @@ const ChatInterface = ({ isOpen, onClose }: ChatInterfaceProps) => {
     setIsTyping(true);
 
     try {
-      const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
-      // Build a compact history payload for the backend: map local roles to assistant roles
+      // Build a compact history payload for the backend
       const historyPayload = (isInit
         ? []
         : [...messages, ...(userMessage ? [userMessage] : [])].map((m) => ({
           role: m.role === "bot" ? "assistant" : "user",
           content: m.content,
         }))
-      ).slice(-20); // keep the last 20 messages to limit request size
+      ).slice(-20);
 
-      const res = await fetch(`${API_BASE}/api/chat`, {
+      const res = await fetch(API_ENDPOINTS.CHAT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: messageText, history: historyPayload }),

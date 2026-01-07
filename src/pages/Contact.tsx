@@ -5,6 +5,7 @@ import WindowCard from "@/components/WindowCard";
 import GlassCard from "@/components/GlassCard";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { toast } from "@/hooks/use-toast";
+import { API_ENDPOINTS } from "@/lib/api";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +29,7 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Basic validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       toast({
@@ -51,8 +52,7 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const API_BASE = (import.meta as any).env.VITE_API_BASE || "http://127.0.0.1:8000";
-      const res = await fetch(`${API_BASE}/api/contact`, {
+      const res = await fetch(API_ENDPOINTS.CONTACT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

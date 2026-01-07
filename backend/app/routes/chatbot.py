@@ -8,120 +8,6 @@ from google import genai
 router = APIRouter()
 
 
-def _extract_text_from_gemini_response(data: Dict[str, Any]) -> str:
-    """Extract text from Gemini/Generative Language API responses.
-
-    This function handles multiple response shapes returned by different
-    Gemini model versions (e.g. `candidates[].content.parts`, `message.content.parts`,
-    `output[].content.parts`, or simple string content).
-    """
-
-    try:
-        # candidates (common modern shape)
-        candidates = data.get("candidates")
-        if isinstance(candidates, list) and len(candidates) > 0:
-            first = candidates[0]
-
-            # content can be a plain string
-            content = first.get("content")
-            if isinstance(content, str):
-                return content
-
-            # content can be a dict with 'parts'
-            if isinstance(content, dict):
-                parts = content.get("parts") or content.get("content") or []
-                if isinstance(parts, list) and len(parts) > 0:
-                    texts: List[str] = []
-                    for p in parts:
-                        if isinstance(p, dict) and p.get("text"):
-                            texts.append(str(p.get("text")))
-                        elif isinstance(p, str):
-                            texts.append(p)
-                    if texts:
-                        return "".join(texts)
-                if isinstance(content.get("text"), str):
-                    return content.get("text")
-
-            # content can be a list of content blocks
-            if isinstance(content, list) and len(content) > 0:
-                c0 = content[0]
-                if isinstance(c0, dict) and c0.get("text"):
-                    return str(c0["text"])
-                if isinstance(c0, dict) and c0.get("parts"):
-                    parts = c0.get("parts")
-                    texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
-                    if texts:
-                        return "".join(texts)
-
-        # message path (older or alternate shapes)
-        msg = data.get("message")
-        if isinstance(msg, dict):
-            cont = msg.get("content")
-            if isinstance(cont, str):
-                return cont
-            if isinstance(cont, dict) and cont.get("parts"):
-                parts = cont.get("parts")
-                texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
-                if texts:
-                    return "".join(texts)
-            if isinstance(cont, list) and len(cont) > 0:
-                first_cont = cont[0]
-                if isinstance(first_cont, dict) and first_cont.get("text"):
-                    return str(first_cont.get("text"))
-                if isinstance(first_cont, dict) and first_cont.get("parts"):
-                    parts = first_cont.get("parts")
-                    texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
-                    if texts:
-                        return "".join(texts)
-
-        # output path
-        out = data.get("output")
-        if isinstance(out, list) and len(out) > 0:
-            o0 = out[0]
-            cont = o0.get("content") if isinstance(o0, dict) else None
-            if isinstance(cont, str):
-                return cont
-            if isinstance(cont, dict) and cont.get("parts"):
-                parts = cont.get("parts")
-                texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
-                if texts:
-                    return "".join(texts)
-            if isinstance(cont, list) and len(cont) > 0:
-                first_c = cont[0]
-                if isinstance(first_c, dict) and first_c.get("text"):
-                    return str(first_c.get("text"))
-                if isinstance(first_c, dict) and first_c.get("parts"):
-                    parts = first_c.get("parts")
-                    texts = [p.get("text") for p in parts if isinstance(p, dict) and p.get("text")]
-                    if texts:
-                        return "".join(texts)
-
-        # Deep fallback: find 'text' fields anywhere in the payload
-        def _deep_collect_text(obj: Any) -> List[str]:
-            texts: List[str] = []
-            if isinstance(obj, dict):
-                for k, v in obj.items():
-                    if k == "text" and isinstance(v, str):
-                        texts.append(v)
-                    else:
-                        texts.extend(_deep_collect_text(v))
-            elif isinstance(obj, list):
-                for item in obj:
-                    texts.extend(_deep_collect_text(item))
-            return texts
-
-        found_texts = _deep_collect_text(data)
-        if found_texts:
-            return "\n".join(found_texts[:5])
-
-        # final fallback
-        return str(data)
-
-    except Exception:
-        logging.exception("Failed to extract text from Gemini response")
-        return str(data)
-
-
 class ChatMessage(BaseModel):
     message: str
     # Optional conversation history from the frontend. Each item should be
@@ -404,26 +290,11 @@ async def chat(message: ChatMessage):
             logging.error("GEMINI_API_KEY (or GOOGLE_API_KEY) is not set in environment")
             raise RuntimeError("GEMINI_API_KEY is not configured")
 
-        logging.info(
-            "Received chat request; calling Gemini (model=%s, user_input_len=%d, history_size=%d)",
-            model,
-            len(user_input),
-            len(history_items),
-        )
-
-        # Initialize the Gemini API client
+        logging.info("Calling Gemini API...")
         client = genai.Client(api_key=api_key)
-        
-        # Generate content using the Google GenAI SDK
-        response = client.models.generate_content(
-            model=model,
-            contents=combined_text
-        )
+        response = client.models.generate_content(model=model, contents=combined_text)
 
-        content = response.text
-        logging.debug("Gemini response content: %s", content)
-
-        return ChatResponse(response=str(content))
+        return ChatResponse(response=str(response.text))
 
     except RuntimeError as re:
         raise HTTPException(status_code=500, detail=str(re))

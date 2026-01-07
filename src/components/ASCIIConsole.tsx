@@ -99,7 +99,7 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
         const cmdBase = cmd.split(' ')[0];
         return cmdBase.toLowerCase().includes(baseCmd);
       }).slice(0, 6);
-      
+
       setSuggestions(matches);
       setSelectedSuggestion(-1); // Don't auto-select
       setUserNavigatedMenu(false); // Reset navigation flag
@@ -135,21 +135,10 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
 
   const executeCommand = (cmd: string) => {
     const trimmed = cmd.trim();
-    const lower = trimmed.toLowerCase();
-    
     if (!trimmed) return;
 
     // Add to history
-    setCmdHistory(prev => {
-      const updated = [...prev, trimmed];
-      const stored = JSON.parse(localStorage.getItem('consoleStats') || '{}');
-      localStorage.setItem('consoleStats', JSON.stringify({
-        ...stored,
-        commandCount: (stored.commandCount || 0) + 1,
-        lastCommand: trimmed
-      }));
-      return updated;
-    });
+    setCmdHistory(prev => [...prev, trimmed]);
     setHistoryIndex(-1);
 
     // Parse command and args
@@ -157,199 +146,97 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
     const baseCmd = parts[0]?.toLowerCase() || '';
     const args = parts.slice(1);
 
-    switch (baseCmd) {
-      case 'whoami':
-        addOutput('Shreyas Gowda B — MSc Data Science (UofG). Building AI products with FastAPI + React.', 'normal');
-        break;
-      
-      case 'projects':
-        const projectTable = projectsData.map((p, i) => 
+    const registry: Record<string, () => void> = {
+      whoami: () => addOutput('Shreyas Gowda B — MSc Data Science (UofG). Building AI products with FastAPI + React.', 'normal'),
+      projects: () => {
+        const table = projectsData.map((p, i) =>
           `${String(i + 1).padStart(2)} ${p.slug.padEnd(20)} ${p.year} ${p.summary.substring(0, 50)}...`
         ).join('\n');
-        addOutput(`IDX SLUG                 YEAR SUMMARY\n${projectTable}`, 'normal');
-        break;
-      
-      case 'open':
-        if (args.length === 0) {
-          addOutput('Usage: open <idx|slug>', 'error');
+        addOutput(`IDX SLUG                 YEAR SUMMARY\n${table}`, 'normal');
+      },
+      open: () => {
+        if (args.length === 0) return addOutput('Usage: open <idx|slug>', 'error');
+        const target = args[0];
+        const idx = parseInt(target);
+        const project = isNaN(idx) ? projectsData.find(p => p.slug === target) : projectsData[idx - 1];
+        if (project) {
+          addOutput(`Opening ${project.title}...`, 'success');
+          scrollToProject(project.slug);
+          setIsOpen(false);
         } else {
-          const target = args[0];
-          const idx = parseInt(target);
-          const project = isNaN(idx) 
-            ? projectsData.find(p => p.slug === target)
-            : projectsData[idx - 1];
-          
-          if (project) {
-            addOutput(`Opening ${project.title}...`, 'success');
-            scrollToProject(project.slug);
-            setIsOpen(false);
-          } else {
-            addOutput(`Project not found: ${target}`, 'error');
-          }
+          addOutput(`Project not found: ${target}`, 'error');
         }
-        break;
-      
-      case 'search':
-        if (args.length === 0) {
-          addOutput('Usage: search <term>', 'error');
-        } else {
-          const term = args.join(' ').replace(/"/g, '').toLowerCase();
-          const projectMatches = projectsData
-            .map((p, i) => ({ ...p, idx: i + 1, type: 'project' as const }))
-            .filter(p => 
-              p.title.toLowerCase().includes(term) || 
-              p.summary.toLowerCase().includes(term) ||
-              p.tags.some(t => t.toLowerCase().includes(term))
-            );
-          
-          const expMatches = internshipsData
-            .map((e, i) => ({ ...e, idx: i + 1, type: 'experience' as const }))
-            .filter(e => 
-              e.role.toLowerCase().includes(term) || 
-              e.company.toLowerCase().includes(term)
-            );
-          
-          const results: Array<typeof projectMatches[0] | typeof expMatches[0]> = [...projectMatches, ...expMatches].slice(0, 5);
-          
-          if (results.length === 0) {
-            addOutput(`No results found for "${term}"`, 'normal');
-          } else {
-            const resultText = results.map(r => {
-              if (r.type === 'project') {
-                const proj = r as typeof projectMatches[0];
-                return `[${r.type}] ${r.idx}. ${proj.title}`;
-              } else {
-                const exp = r as typeof expMatches[0];
-                return `[${r.type}] ${r.idx}. ${exp.role} @ ${exp.company}`;
-              }
-            }).join('\n');
-            addOutput(`Search results for "${term}":\n${resultText}`, 'normal');
-          }
-        }
-        break;
-      
-      case 'skills':
-        const showAll = args.includes('--all');
-        const skillCounts = new Map<string, number>();
-        
-        projectsData.forEach(p => {
-          p.tech.forEach(t => {
-            skillCounts.set(t, (skillCounts.get(t) || 0) + 1);
-          });
-        });
-        
-        const sorted = Array.from(skillCounts.entries())
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, showAll ? undefined : 10);
-        
-        const skillText = sorted.map(([skill, count]) => `${skill} (${count})`).join(', ');
-        addOutput(`Skills: ${skillText}`, 'normal');
-        break;
-      
-      case 'theme':
-        if (args.length === 0 || !['dark', 'light', 'neon'].includes(args[0])) {
-          addOutput('Usage: theme <dark|light|neon>', 'error');
-        } else {
-          updateSetting('theme', args[0] as 'dark' | 'light' | 'neon');
-          addOutput(`Theme switched to ${args[0]} ✓`, 'success');
-        }
-        break;
-      
-      case 'particles':
-        if (args.length === 0 || !['on', 'off'].includes(args[0])) {
-          addOutput('Usage: particles <on|off>', 'error');
-        } else {
-          updateSetting('particles', args[0] === 'on');
-          addOutput(`Particles ${args[0]} ✓`, 'success');
-        }
-        break;
-      
-      case 'parallax':
-        if (args.length === 0 || !['on', 'off'].includes(args[0])) {
-          addOutput('Usage: parallax <on|off>', 'error');
-        } else {
-          updateSetting('parallax', args[0] === 'on');
-          addOutput(`Parallax ${args[0]} ✓`, 'success');
-        }
-        break;
-      
-      case 'status':
-        const uptime = getUptime();
-        const visitors = Math.floor(Math.random() * 100) + 200;
-        const cpu = (Math.random() * 5 + 1).toFixed(1);
-        const temp = Math.floor(Math.random() * 10) + 38;
-        addOutput(`$ uptime: ${uptime} | visitors: ${visitors} | cpu: ${cpu}% | temp: ${temp}°C`, 'normal');
-        break;
-      
-      case 'uptime':
-        addOutput(`Session uptime: ${getUptime()}`, 'normal');
-        break;
-      
-      case 'contact':
-        addOutput(
-          'Email: gowdashreyas364@gmail.com\nGitHub: https://github.com/shreyeahhs\nLinkedIn: https://www.linkedin.com/in/shreyas-gowda-5316b51b1/\nInstagram: https://www.instagram.com/shreyeahhs/',
-          'normal'
-        );
+      },
+      search: () => {
+        if (args.length === 0) return addOutput('Usage: search <term>', 'error');
+        const term = args.join(' ').replace(/"/g, '').toLowerCase();
+        const pMatches = projectsData.filter(p => p.title.toLowerCase().includes(term) || p.summary.toLowerCase().includes(term) || p.tags.some(t => t.toLowerCase().includes(term)));
+        const eMatches = internshipsData.filter(e => e.role.toLowerCase().includes(term) || e.company.toLowerCase().includes(term));
+        const combined = [...pMatches.map(p => `[project] ${p.title}`), ...eMatches.map(e => `[experience] ${e.role} @ ${e.company}`)].slice(0, 5);
+        addOutput(combined.length ? `Results for "${term}":\n${combined.join('\n')}` : `No results for "${term}"`, 'normal');
+      },
+      skills: () => {
+        const skillText = projectsData.flatMap(p => p.tech).reduce((acc, s) => acc.set(s, (acc.get(s) || 0) + 1), new Map<string, number>());
+        const sorted = Array.from(skillText.entries()).sort((a, b) => b[1] - a[1]).slice(0, args.includes('--all') ? undefined : 10);
+        addOutput(`Skills: ${sorted.map(([s, c]) => `${s} (${c})`).join(', ')}`, 'normal');
+      },
+      theme: () => {
+        const t = args[0] as any;
+        if (!['dark', 'light', 'neon'].includes(t)) return addOutput('Usage: theme <dark|light|neon>', 'error');
+        updateSetting('theme', t);
+        addOutput(`Theme: ${t} ✓`, 'success');
+      },
+      particles: () => {
+        if (!['on', 'off'].includes(args[0])) return addOutput('Usage: particles <on|off>', 'error');
+        updateSetting('particles', args[0] === 'on');
+        addOutput(`Particles: ${args[0]} ✓`, 'success');
+      },
+      parallax: () => {
+        if (!['on', 'off'].includes(args[0])) return addOutput('Usage: parallax <on|off>', 'error');
+        updateSetting('parallax', args[0] === 'on');
+        addOutput(`Parallax: ${args[0]} ✓`, 'success');
+      },
+      status: () => addOutput(`$ uptime: ${getUptime()} | visitors: ${Math.floor(Math.random() * 100) + 200} | cpu: ${(Math.random() * 5 + 1).toFixed(1)}% | temp: ${Math.floor(Math.random() * 10) + 38}°C`, 'normal'),
+      uptime: () => addOutput(`Session uptime: ${getUptime()}`, 'normal'),
+      contact: () => {
+        addOutput('Email: gowdashreyas364@gmail.com\nGitHub: github.com/shreyeahhs\nLinkedIn: linkedin.com/in/shreyas-gowda-5316b51b1/', 'normal');
         setShowContactCTA(true);
-        break;
-      
-      case 'resume':
-        addOutput('Resume dispatched → downloading CV...', 'success');
-        // Trigger download logic here
-        break;
-      
-      case 'history':
+      },
+      resume: () => addOutput('Resume dispatched → downloading CV...', 'success'),
+      history: () => {
         if (args[0] === '-c') {
           setCmdHistory([]);
-          addOutput('Command history cleared', 'success');
+          addOutput('History cleared', 'success');
         } else {
-          const last10 = cmdHistory.slice(-10);
-          if (last10.length === 0) {
-            addOutput('No command history', 'normal');
-          } else {
-            const histText = last10.map((c, i) => `${i + 1}. ${c}`).join('\n');
-            addOutput(`Recent commands:\n${histText}`, 'normal');
-          }
+          addOutput(cmdHistory.slice(-10).map((c, i) => `${i + 1}. ${c}`).join('\n') || 'No history', 'normal');
         }
-        break;
-      
-      case 'echo':
-        const text = args.join(' ').replace(/^"|"$/g, '');
-        addOutput(text || '', 'normal');
-        break;
-      
-      case 'version':
-        addOutput('ShreyasOS v1.0.0 — Built 2024-11-08', 'normal');
-        break;
-      
-      case 'fortune':
-        const quote = quotes[Math.floor(Math.random() * quotes.length)];
-        addOutput(quote, 'normal');
-        break;
-      
-      case 'sudo':
+      },
+      echo: () => addOutput(args.join(' ').replace(/^"|"$/g, '') || '', 'normal'),
+      version: () => addOutput('ShreyasOS v1.1.0 — Refactored 2026-01-07', 'normal'),
+      fortune: () => addOutput(quotes[Math.floor(Math.random() * quotes.length)], 'normal'),
+      sudo: () => {
         if (args.join(' ').toLowerCase() === 'hire shreyas') {
           addOutput('Access granted ✅', 'success');
           setShowContactCTA(true);
         } else {
           addOutput(`sudo: ${args.join(' ')}: command not found`, 'error');
         }
-        break;
-      
-      case 'clear':
+      },
+      clear: () => {
         setOutput([]);
         setShowContactCTA(false);
-        break;
-      
-      case 'help':
-        const helpText = Object.entries(commands)
-          .map(([c, desc]) => `  ${c.padEnd(30)} - ${desc}`)
-          .join('\n');
-        addOutput(`Available commands:\n${helpText}`, 'normal');
-        break;
-      
-      default:
-        addOutput(`Command not found: "${baseCmd}". Type "help" for available commands.`, 'error');
+      },
+      help: () => {
+        const text = Object.entries(commands).map(([c, d]) => `  ${c.padEnd(30)} - ${d}`).join('\n');
+        addOutput(`Available commands:\n${text}`, 'normal');
+      },
+    };
+
+    const action = registry[baseCmd];
+    if (action) {
+      action();
+    } else {
+      addOutput(`Command not found: "${baseCmd}". Type "help" for available commands.`, 'error');
     }
 
     setInput('');
@@ -411,13 +298,12 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
                 [{item.timestamp}]
               </div>
               <div
-                className={`whitespace-pre-wrap select-text ${
-                  item.type === 'success'
+                className={`whitespace-pre-wrap select-text ${item.type === 'success'
                     ? 'text-[hsl(var(--accent))]'
                     : item.type === 'error'
-                    ? 'text-[hsl(var(--traffic-red))]'
-                    : 'text-[hsl(var(--text-strong))]'
-                }`}
+                      ? 'text-[hsl(var(--traffic-red))]'
+                      : 'text-[hsl(var(--text-strong))]'
+                  }`}
               >
                 {item.text}
               </div>
@@ -538,7 +424,7 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
 
             {/* Autocomplete dropdown */}
             {suggestions.length > 0 && (
-              <div 
+              <div
                 className="absolute bottom-full left-0 right-0 mb-1 rounded-md border overflow-hidden max-h-[240px] overflow-y-auto scrollbar-hide z-[100]"
                 style={{
                   background: 'rgba(10, 14, 20, 0.95)',
@@ -560,11 +446,10 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
                     }}
                     role="option"
                     aria-selected={i === selectedSuggestion}
-                    className={`w-full px-3 py-1.5 text-left font-mono transition-all duration-100 ${
-                      i === selectedSuggestion
+                    className={`w-full px-3 py-1.5 text-left font-mono transition-all duration-100 ${i === selectedSuggestion
                         ? 'bg-[rgba(34,197,94,0.15)] text-[#34d399] border-l-2 border-[#22c55e]'
                         : 'text-[rgba(240,240,240,0.92)] hover:bg-[rgba(34,197,94,0.15)] hover:text-[#34d399] hover:border-l-2 hover:border-[#22c55e] border-l-2 border-transparent'
-                    }`}
+                      }`}
                     style={{
                       fontSize: '13px',
                       lineHeight: '1.6',

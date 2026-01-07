@@ -11,16 +11,9 @@ import logging
 import asyncio
 import httpx
 
-app = FastAPI(title="Shreyas Gowda Portfolio API", version="1.0.0")
+from contextlib import asynccontextmanager
 
-
-@app.get("/")
-async def root():
-    # Provide a lightweight 200 response at the root so platforms probing `/` get OK.
-    return {"status": "ok", "service": "portfolio-backend"}
-
-
-async def keep_alive_task():
+async def keep_alive_task(client: httpx.AsyncClient):
     """Background task that pings the health endpoint every 14 minutes to prevent service inactivity."""
     await asyncio.sleep(60)  # Wait 1 minute after startup before first ping
     
@@ -32,12 +25,11 @@ async def keep_alive_task():
                 port = os.getenv("PORT", "8000")
                 service_url = f"http://localhost:{port}"
             
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(f"{service_url}/api/health")
-                if response.status_code == 200:
-                    logging.info("Keep-alive ping successful")
-                else:
-                    logging.warning(f"Keep-alive ping returned status {response.status_code}")
+            response = await client.get(f"{service_url}/api/health")
+            if response.status_code == 200:
+                logging.info("Keep-alive ping successful")
+            else:
+                logging.warning(f"Keep-alive ping returned status {response.status_code}")
         except Exception as e:
             logging.error(f"Keep-alive ping failed: {e}")
         
@@ -45,8 +37,9 @@ async def keep_alive_task():
         await asyncio.sleep(14 * 60)
 
 
-@app.on_event("startup")
-async def startup_checks():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup logic
     # Validate critical environment variables early and log helpful messages.
     if not (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")):
         logging.warning(
@@ -55,9 +48,29 @@ async def startup_checks():
     else:
         logging.info("GEMINI_API_KEY found — chatbot ready.")
     
-    # Start the keep-alive background task
-    asyncio.create_task(keep_alive_task())
-    logging.info("Keep-alive task started — will ping every 14 minutes")
+    # Initialize shared AsyncClient
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        app.state.http_client = client
+        
+        # Start the keep-alive background task
+        asyncio.create_task(keep_alive_task(client))
+        logging.info("Keep-alive task started — will ping every 14 minutes")
+        
+        yield
+    # Shutdown logic
+    logging.info("Shutting down — closing AsyncClient")
+
+app = FastAPI(
+    title="Shreyas Gowda Portfolio API", 
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+
+@app.get("/")
+async def root():
+    # Provide a lightweight 200 response at the root so platforms probing `/` get OK.
+    return {"status": "ok", "service": "portfolio-backend"}
 
 # CORS configuration
 app.add_middleware(

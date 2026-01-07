@@ -62,7 +62,6 @@ const AppContent = () => {
       <ParallaxLayers />
       <ParticleBackground />
       <NavBar />
-      <NavBar />
       <div className="hidden md:block">
         <CommandLine />
       </div>

@@ -5,6 +5,7 @@ import Badge from "@/components/Badge";
 import internshipsData from "@/data/internships.json";
 import { Internship } from "@/types/Internship";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { cn } from "@/lib/utils";
 
 const Experience = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -22,10 +23,12 @@ const Experience = () => {
   // Format date range
   const formatDateRange = (start: string, end: string) => {
     const formatMonth = (dateStr: string) => {
+      if (!dateStr) return "";
       if (dateStr.toLowerCase() === "present") return "present";
+      // Convert YYYY-MM to YYYY.MM
       return dateStr.replace("-", ".");
     };
-    return `${formatMonth(start)}–${formatMonth(end)}`;
+    return `${formatMonth(start)} — ${formatMonth(end)}`;
   };
 
   // Scroll reveal effect
@@ -44,7 +47,7 @@ const Experience = () => {
           }
         });
       },
-      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -5% 0px" }
     );
 
     rowRefs.current.forEach((ref) => {
@@ -55,11 +58,10 @@ const Experience = () => {
   }, [sortedExperiences.length, prefersReducedMotion]);
 
   // Toggle expansion
-  const toggleExpand = (company: string, index: number) => {
+  const toggleExpand = (company: string) => {
     const newId = expandedId === company ? null : company;
     setExpandedId(newId);
-    
-    // Store in localStorage
+
     if (newId) {
       localStorage.setItem("experience-expanded", newId);
     } else {
@@ -91,95 +93,75 @@ const Experience = () => {
   };
 
   const rowVariants = {
-    hidden: { opacity: 0, x: prefersReducedMotion ? 0 : -12, filter: "blur(4px)" },
+    hidden: { opacity: 0, x: prefersReducedMotion ? 0 : -20 },
     visible: {
       opacity: 1,
       x: 0,
-      filter: "blur(0px)",
       transition: {
-        duration: prefersReducedMotion ? 0.1 : 0.4,
-        ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+        duration: prefersReducedMotion ? 0.1 : 0.5,
+        ease: "easeOut" as any,
       },
     },
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, scale: prefersReducedMotion ? 1 : 0.96, y: prefersReducedMotion ? 0 : 8 },
+    hidden: { opacity: 0, height: 0, marginTop: 0 },
     visible: {
       opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: prefersReducedMotion ? {
-        duration: 0.12,
-      } : {
-        type: "spring" as const,
-        stiffness: 400,
-        damping: 28,
-      },
+      height: "auto",
+      marginTop: 16,
+      transition: {
+        height: { duration: 0.3 },
+        opacity: { duration: 0.2, delay: 0.1 },
+      }
     },
     exit: {
       opacity: 0,
-      scale: prefersReducedMotion ? 1 : 0.96,
-      y: prefersReducedMotion ? 0 : 8,
+      height: 0,
+      marginTop: 0,
       transition: {
-        duration: prefersReducedMotion ? 0.1 : 0.2,
-        ease: "easeOut" as const,
-      },
+        height: { duration: 0.3 },
+        opacity: { duration: 0.1 },
+      }
     },
   };
 
   return (
     <main
-      className="min-h-screen pt-24 pb-16 relative"
-      style={{
-        backgroundColor: "#0B0F14",
-        backgroundImage: `
-          radial-gradient(1000px circle at 50% -20%, rgba(255,255,255,0.08), transparent 60%),
-          repeating-linear-gradient(
-            -45deg,
-            rgba(255,255,255,0.06) 0px,
-            rgba(255,255,255,0.06) 1px,
-            transparent 1px,
-            transparent 12px
-          )
-        `,
-      }}
-      role="region"
-      aria-label="Experience"
+      className="min-h-screen pt-24 pb-24 relative overflow-hidden"
+      style={{ backgroundColor: "#0B0F14" }}
     >
-      <div className="container mx-auto px-4 max-w-5xl">
-        {/* Header */}
+      {/* Background patterns */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 bg-grid-diagonal" />
+      </div>
+
+      <div className="container mx-auto px-4 max-w-5xl relative z-10">
+        {/* Header - Aligned with timeline dot center (approx 160px from left on desktop) */}
         <motion.div
-          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : -12 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: prefersReducedMotion ? 0.1 : 0.5 }}
-          className="mb-12"
+          className="mb-16 md:pl-[142px]" // 130px (date) + 12px (space)
         >
-          <h1 className="text-3xl md:text-4xl font-bold mb-3 font-mono">
-            <span className="text-[hsl(var(--accent))] drop-shadow-[0_0_8px_hsl(var(--accent-glow))]">$</span>{" "}
-            <span className="text-foreground">grep -r "experience" ./career</span>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 font-mono tracking-tight">
+            <span className="text-[hsl(var(--accent))] accent-glow">$</span>{" "}
+            grep -r <span className="text-text-muted">"experience"</span> ./career
           </h1>
-          <p className="text-text-muted text-base md:text-lg">
-            Professional work across data science, AI, and engineering.
+          <p className="text-text-muted text-lg font-mono">
+            {">"} Professional journey in Data Science & AI.
           </p>
         </motion.div>
 
-        {/* Experience list */}
-        <div className="space-y-0 relative">
-          {/* Vertical rule */}
+        {/* Experience List Container */}
+        <div className="relative">
+          {/* Vertical Timeline Line */}
           <div
-            className="absolute left-0 top-0 bottom-0 w-px bg-border-color/30 hidden md:block"
+            className="absolute left-0 md:left-[130px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[hsl(var(--accent))/0.5] via-border-color/20 to-transparent hidden md:block"
             aria-hidden="true"
           />
 
-          {sortedExperiences.length === 0 ? (
-            <div className="font-mono text-sm text-text-muted">
-              <span className="text-[hsl(var(--accent))]">$</span> grep -r "experience" ./career
-              <br />
-              <span className="text-muted-foreground/60">0 matches</span>
-            </div>
-          ) : (
-            sortedExperiences.map((exp, index) => {
+          <div className="space-y-2">
+            {sortedExperiences.map((exp, index) => {
               const isExpanded = expandedId === exp.company;
               const isVisible = visibleRows.has(index);
 
@@ -192,179 +174,108 @@ const Experience = () => {
                     variants={rowVariants}
                     initial="hidden"
                     animate={isVisible ? "visible" : "hidden"}
-                    onClick={() => toggleExpand(exp.company, index)}
+                    onClick={() => toggleExpand(exp.company)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
-                    aria-expanded={isExpanded}
-                    aria-controls={`exp-card-${exp.company}`}
-                    className="w-full text-left py-3 md:py-4 md:pl-8 group transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))] focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-lg"
-                    style={{
-                      background: "transparent",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.02)";
-                      e.currentTarget.style.backdropFilter = "blur(8px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent";
-                      e.currentTarget.style.backdropFilter = "none";
-                    }}
+                    className={cn(
+                      "w-full text-left p-3 md:p-5 rounded-xl transition-all duration-300 group mb-2",
+                      "bg-white/[0.015] border border-white/15 hover:border-white/30 hover:bg-white/[0.04]",
+                      isExpanded && "bg-white/[0.05] border-[hsl(var(--accent))]/40 shadow-xl shadow-[hsl(var(--accent))]/5"
+                    )}
                   >
-                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
-                      {/* Date */}
-                      <span className="font-mono text-xs md:text-sm text-text-muted/70 min-w-[140px] shrink-0">
+                    <div className="flex flex-col md:flex-row md:items-center gap-4">
+                      {/* Date Column (fixed width on desktop) */}
+                      <div className="md:w-[130px] shrink-0 font-mono text-[12px] text-text-muted/60 group-hover:text-text-muted transition-colors">
                         {formatDateRange(exp.start, exp.end)}
-                      </span>
-
-                      {/* Role & Company */}
-                      <div className="flex-1 flex items-center gap-2 flex-wrap">
-                        <span className="font-semibold text-sm md:text-base text-foreground group-hover:text-[hsl(var(--accent))] transition-colors">
-                          {exp.role}
-                        </span>
-                        <span className="text-text-muted text-sm">—</span>
-                        <span className="text-sm md:text-base text-[hsl(var(--accent))]/90 group-hover:text-[hsl(var(--accent))] transition-colors">
-                          {exp.company}
-                        </span>
                       </div>
 
-                      {/* Tags preview or chevron */}
-                      <div className="flex items-center gap-2 shrink-0">
-                        {exp.tools?.slice(0, 3).map((tag, i) => (
-                          <span
-                            key={i}
-                            className="hidden md:inline-block px-2 py-0.5 text-xs rounded-full bg-panel/60 border border-border-color/40 text-text-muted"
-                          >
-                            {tag}
+                      {/* Content Column */}
+                      <div className="flex-1 space-y-0.5">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                          <h2 className="text-base md:text-lg font-semibold text-text-strong group-hover:text-[hsl(var(--accent))] transition-colors">
+                            {exp.role}
+                          </h2>
+                          <span className="text-text-muted/40 hidden md:inline">—</span>
+                          <span className="text-[hsl(var(--accent))] text-sm font-medium opacity-80 group-hover:opacity-100">
+                            {exp.company}
                           </span>
-                        ))}
-                        <ChevronRight
-                          size={16}
-                          className={`text-text-muted/60 transition-transform ${
-                            isExpanded ? "rotate-90" : ""
-                          }`}
-                        />
+                        </div>
+
+                        <div className="flex flex-wrap gap-1.5 pt-0.5">
+                          {exp.tools?.map((tool, i) => (
+                            <span
+                              key={i}
+                              className="px-1.5 py-0.5 text-[9px] font-mono uppercase tracking-wider rounded border border-white/5 bg-white/5 text-text-muted/70"
+                            >
+                              {tool}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Interaction hint */}
+                      <div className="shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-white/5 opacity-40 group-hover:opacity-100 transition-all transform group-hover:translate-x-1">
+                        <ChevronRight className={cn("w-3.5 h-3.5 transition-transform", isExpanded && "rotate-90")} />
                       </div>
                     </div>
                   </motion.button>
 
-                  {/* Expanded card */}
+                  {/* Details Card */}
                   <AnimatePresence>
                     {isExpanded && (
                       <motion.div
-                        id={`exp-card-${exp.company}`}
                         variants={cardVariants}
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className="my-4 md:ml-8 p-6 md:p-8 space-y-5"
-                        style={{
-                          backdropFilter: "blur(12px)",
-                          WebkitBackdropFilter: "blur(12px)",
-                          background: "rgba(255, 255, 255, 0.04)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                          borderRadius: "16px",
-                          boxShadow: "0 4px 24px rgba(0, 0, 0, 0.4)",
-                        }}
-                        role="region"
-                        aria-live="polite"
+                        className="overflow-hidden md:ml-[150px]"
                       >
-                        {/* Header */}
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <h3 className="text-xl md:text-2xl font-bold mb-1 text-foreground">
-                              {exp.role}
-                            </h3>
-                            <p className="text-[hsl(var(--accent))] font-medium mb-2">
-                              {exp.company}
-                            </p>
-                            <div className="flex flex-wrap items-center gap-3 text-sm text-text-muted">
+                        <div className="p-6 md:p-8 glass bg-panel/40 space-y-6">
+                          <div className="flex flex-col md:flex-row justify-between gap-4">
+                            <div className="space-y-1">
+                              <h3 className="text-xl font-bold text-text-strong">{exp.role}</h3>
+                              <p className="text-[hsl(var(--accent))] font-mono">{exp.company}</p>
                               {exp.location && (
-                                <span className="flex items-center gap-1.5">
-                                  <MapPin size={14} className="text-[hsl(var(--accent))]/70" />
+                                <p className="text-sm text-text-muted flex items-center gap-2">
+                                  <MapPin className="w-4 h-4 text-[hsl(var(--accent))]/60" />
                                   {exp.location}
-                                </span>
+                                </p>
                               )}
-                              <span className="font-mono text-xs">
-                                {formatDateRange(exp.start, exp.end)}
-                              </span>
                             </div>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setExpandedId(null); }}
+                              className="p-2 hover:bg-white/10 rounded-lg self-start transition-colors"
+                            >
+                              <X className="w-5 h-5 text-text-muted" />
+                            </button>
                           </div>
-                          <button
-                            onClick={() => setExpandedId(null)}
-                            className="shrink-0 p-2 rounded-lg hover:bg-panel/60 transition-colors text-text-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))]"
-                            aria-label="Close details"
-                          >
-                            <X size={20} />
-                          </button>
-                        </div>
 
-                        {/* Highlights */}
-                        {exp.highlights && exp.highlights.length > 0 && (
-                          <ul className="space-y-2 text-sm text-text-muted">
-                            {exp.highlights.map((item, i) => (
-                              <li key={i} className="flex gap-2">
-                                <span className="text-[hsl(var(--accent))] mt-1 shrink-0">▹</span>
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
+                          <div className="space-y-4">
+                            <h4 className="text-xs font-mono uppercase tracking-[0.2em] text-text-muted/60 border-b border-white/5 pb-2">Key Contributions</h4>
+                            <ul className="space-y-3">
+                              {exp.highlights?.map((point, i) => (
+                                <li key={i} className="flex gap-3 text-sm text-text-muted/90 leading-relaxed">
+                                  <span className="text-[hsl(var(--accent))] shrink-0 mt-1">▹</span>
+                                  {point}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
 
-                        {/* Tags */}
-                        {exp.tools && exp.tools.length > 0 && (
-                          <div className="flex flex-wrap gap-2">
-                            {exp.tools.map((tag, i) => (
-                              <Badge key={i} variant="default">
-                                {tag}
+                          <div className="flex flex-wrap gap-2 pt-2">
+                            {exp.tools?.map((tool, i) => (
+                              <Badge key={i} variant="outline" className="font-mono text-[10px] bg-transparent border-white/20">
+                                {tool}
                               </Badge>
                             ))}
                           </div>
-                        )}
-
-                        {/* Links (if available) */}
-                        {(exp as any).links && (
-                          <div className="flex flex-wrap gap-3 pt-2 border-t border-border-color/30">
-                            {(exp as any).links.live && (
-                              <a
-                                href={(exp as any).links.live}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-sm text-[hsl(var(--accent))] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))] rounded"
-                              >
-                                <ExternalLink size={14} />
-                                Live
-                              </a>
-                            )}
-                            {(exp as any).links.repo && (
-                              <a
-                                href={(exp as any).links.repo}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-sm text-[hsl(var(--accent))] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))] rounded"
-                              >
-                                <Github size={14} />
-                                Repo
-                              </a>
-                            )}
-                            {(exp as any).links.case && (
-                              <a
-                                href={(exp as any).links.case}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-sm text-[hsl(var(--accent))] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))] rounded"
-                              >
-                                <FileText size={14} />
-                                Case Study
-                              </a>
-                            )}
-                          </div>
-                        )}
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
               );
-            })
-          )}
+            })}
+          </div>
         </div>
       </div>
     </main>

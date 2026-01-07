@@ -1,11 +1,33 @@
 [
   {
+    "company": "Inclusive Homework Club",
+    "role": "Volunteer Tutor",
+    "location": "Glasgow, UK",
+    "start": "2025-10",
+    "end": "Present",
+    "tools": [
+      "English Teaching",
+      "Mathematics",
+      "Mentoring"
+    ],
+    "highlights": [
+      "Providing academic support in English and Mathematics to students at the Inclusive Homework Club",
+      "Facilitating an inclusive and supportive learning environment for diverse learners"
+    ]
+  },
+  {
     "company": "Publicis Sapient",
     "role": "Data Analyst Intern — Sustainability Division",
     "location": "Bangalore, India",
     "start": "2024-06",
     "end": "2024-08",
-    "tools": ["Python", "SQL", "Tableau", "AWS", "Power BI"],
+    "tools": [
+      "Python",
+      "SQL",
+      "Tableau",
+      "AWS",
+      "Power BI"
+    ],
     "highlights": [
       "Analyzed carbon footprint data for Fortune 500 clients, identifying 15% reduction opportunities",
       "Built automated ETL pipelines processing 100K+ sustainability metrics daily",
@@ -18,7 +40,13 @@
     "location": "Remote",
     "start": "2023-12",
     "end": "2024-05",
-    "tools": ["FastAPI", "React", "OpenAI", "WebRTC", "PostgreSQL"],
+    "tools": [
+      "FastAPI",
+      "React",
+      "OpenAI",
+      "WebRTC",
+      "PostgreSQL"
+    ],
     "highlights": [
       "Led development of Edudiagno platform with real-time AI interview capabilities",
       "Implemented speech-to-text and sentiment analysis for 1000+ interview sessions",
@@ -31,7 +59,13 @@
     "location": "Bangalore, India",
     "start": "2023-06",
     "end": "2023-11",
-    "tools": ["Python", "PostGIS", "SQL", "QGIS", "Pandas"],
+    "tools": [
+      "Python",
+      "PostGIS",
+      "SQL",
+      "QGIS",
+      "Pandas"
+    ],
     "highlights": [
       "Cleaned and standardized 10,000+ geospatial metadata records",
       "Developed automated quality assurance scripts reducing errors by 40%",
@@ -44,7 +78,13 @@
     "location": "Bangalore, India",
     "start": "2023-01",
     "end": "2023-05",
-    "tools": ["React", "Node.js", "MongoDB", "Express", "REST APIs"],
+    "tools": [
+      "React",
+      "Node.js",
+      "MongoDB",
+      "Express",
+      "REST APIs"
+    ],
     "highlights": [
       "Built responsive web applications for 5+ client projects",
       "Implemented RESTful APIs and database schemas for e-learning platform",
@@ -57,7 +97,12 @@
     "location": "Remote",
     "start": "2022-08",
     "end": "2022-12",
-    "tools": ["Figma", "Adobe XD", "Prototyping", "User Research"],
+    "tools": [
+      "Figma",
+      "Adobe XD",
+      "Prototyping",
+      "User Research"
+    ],
     "highlights": [
       "Designed user interfaces for mobile app with 10K+ downloads",
       "Conducted user research and A/B testing to improve conversion by 25%",

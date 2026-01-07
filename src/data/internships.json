@@ -1,11 +1,33 @@
 [
   {
+    "company": "Inclusive Homework Club",
+    "role": "Volunteer Tutor",
+    "location": "Glasgow, UK",
+    "start": "2025-10",
+    "end": "Present",
+    "tools": [
+      "English Teaching",
+      "Mathematics",
+      "Mentoring"
+    ],
+    "highlights": [
+      "Providing academic support in English and Mathematics to students at the Inclusive Homework Club",
+      "Facilitating an inclusive and supportive learning environment for diverse learners"
+    ]
+  },
+  {
     "company": "Publicis Sapient",
     "role": "AI Engineering Intern",
     "location": "Bangalore, India",
     "start": "2023-11",
     "end": "2023-12",
-    "tools": ["Python", "SQL", "Tableau", "AWS", "Power BI"],
+    "tools": [
+      "Python",
+      "SQL",
+      "Tableau",
+      "AWS",
+      "Power BI"
+    ],
     "highlights": [
       "Supported sustainability analytics for enterprise clients by analysing carbon footprint datasets and uncovering 10–15% emission reduction opportunities",
       "Built automated ETL workflows processing over 100K sustainability and operational metrics daily",
@@ -18,7 +40,13 @@
     "location": "Bangalore, India",
     "start": "2024-09",
     "end": "2024-12",
-    "tools": ["Python", "SQL", "Power BI", "Snowflake", "Excel"],
+    "tools": [
+      "Python",
+      "SQL",
+      "Power BI",
+      "Snowflake",
+      "Excel"
+    ],
     "highlights": [
       "Worked with large-scale sustainability and operations datasets to produce actionable insights for ongoing client programmes",
       "Designed KPI dashboards that improved data visibility across business units",
@@ -31,7 +59,13 @@
     "location": "Remote",
     "start": "2025-01",
     "end": "2025-09",
-    "tools": ["FastAPI", "React", "Gemini", "WebRTC", "PostgreSQL"],
+    "tools": [
+      "FastAPI",
+      "React",
+      "Gemini",
+      "WebRTC",
+      "PostgreSQL"
+    ],
     "highlights": [
       "Led backend and AI development for EduDiagno, an AI-powered interview and assessment platform",
       "Implemented real-time speech-to-text and sentiment analysis workflows used across 1000+ interviews",
@@ -45,7 +79,13 @@
     "location": "Bangalore, India",
     "start": "2023-06",
     "end": "2023-08",
-    "tools": ["Python", "PostGIS", "SQL", "QGIS", "Pandas"],
+    "tools": [
+      "Python",
+      "PostGIS",
+      "SQL",
+      "QGIS",
+      "Pandas"
+    ],
     "highlights": [
       "Cleaned, standardised, and validated more than 10,000 geospatial metadata records",
       "Developed automated QA scripts that reduced geospatial tagging errors by approximately 40%",

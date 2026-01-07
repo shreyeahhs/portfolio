@@ -1,5 +1,21 @@
 [
   {
+    "company": "University of Glasgow",
+    "role": "Reach Out IT Student Ambassador",
+    "location": "Glasgow, UK",
+    "start": "2026-01",
+    "end": "Present",
+    "tools": [
+      "IT Support",
+      "Communication",
+      "Event Management"
+    ],
+    "highlights": [
+      "Representing the IT services at the University of Glasgow, assisting students and staff with technical queries",
+      "Promoting digital literacy and IT resources across the university campus"
+    ]
+  },
+  {
     "company": "Inclusive Homework Club",
     "role": "Volunteer Tutor",
     "location": "Glasgow, UK",

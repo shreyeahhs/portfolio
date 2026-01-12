@@ -190,10 +190,21 @@ const Contact = () => {
 
                 <div>
                   <p className="terminal-prompt text-sm mb-3">$ cat resume.pdf</p>
-                  <button className="glass px-4 py-2 font-mono text-accent hover:bg-accent-muted transition-all flex items-center gap-2 group w-full justify-center">
-                    <FileText size={18} />
-                    Download Resume
-                  </button>
+                  <div className="space-y-3">
+                    <a
+                      href="/Shreyas's Resume.pdf"
+                      download="Shreyas_Resume.pdf"
+                      className="block"
+                    >
+                      <button className="glass px-4 py-2 font-mono text-accent hover:bg-accent-muted transition-all flex items-center gap-2 group w-full justify-center">
+                        <FileText size={18} />
+                        Download Resume
+                      </button>
+                    </a>
+                    <p className="text-[10px] font-mono text-text-subtle/60 leading-tight">
+                      * Resume may be outdated. For the latest version, reach out or browse the portfolio (updated weekly).
+                    </p>
+                  </div>
                 </div>
 
                 <div>

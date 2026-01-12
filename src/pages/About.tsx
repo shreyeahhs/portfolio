@@ -111,10 +111,10 @@ const About = () => {
           </motion.div>
 
           {/* Resume Download */}
-          <motion.div variants={itemVariants}>
+          <motion.div variants={itemVariants} className="space-y-3">
             <a
-              href="/Shreyas Gowda Resume.pdf"
-              download="Shreyas_Gowda_Resume.pdf"
+              href="/Shreyas's Resume.pdf"
+              download="Shreyas_Resume.pdf"
               className="block w-full md:w-auto"
             >
               <button className="glass px-6 py-3 font-mono text-accent hover:bg-accent-muted transition-all flex items-center gap-2 group w-full md:w-auto justify-center">
@@ -122,6 +122,9 @@ const About = () => {
                 Download Resume (PDF)
               </button>
             </a>
+            <p className="text-xs font-mono text-text-subtle/70 text-center md:text-left">
+              * Note: Resume may be outdated. For the latest info, reach out or browse this portfolio (updated weekly).
+            </p>
           </motion.div>
         </motion.div>
       </div>

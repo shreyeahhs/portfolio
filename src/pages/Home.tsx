@@ -94,7 +94,7 @@ const Home = () => {
                       <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                   </Link>
-                  <a href="/Shreyas Gowda Resume.pdf" download="Shreyas_Gowda_Resume.pdf">
+                  <a href="/Shreyas's Resume.pdf" download="Shreyas_Resume.pdf">
                     <button className="glass px-6 py-3 font-mono text-text-strong hover:text-accent transition-colors flex items-center gap-2">
                       Resume()
                     </button>
@@ -104,6 +104,11 @@ const Home = () => {
                       Contact()
                     </button>
                   </Link>
+                </div>
+                <div className="pt-2">
+                  <p className="text-[10px] font-mono text-text-subtle/60 leading-tight">
+                    * Resume may be outdated. For the latest version, reach out or browse the portfolio (updated weekly).
+                  </p>
                 </div>
               </div>
             </WindowCard>

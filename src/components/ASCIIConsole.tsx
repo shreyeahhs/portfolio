@@ -202,7 +202,11 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
         addOutput('Email: gowdashreyas364@gmail.com\nGitHub: github.com/shreyeahhs\nLinkedIn: linkedin.com/in/shreyas-gowda-5316b51b1/', 'normal');
         setShowContactCTA(true);
       },
-      resume: () => addOutput('Resume dispatched → downloading CV...', 'success'),
+      resume: () => {
+        addOutput('Resume dispatched → downloading CV...', 'success');
+        addOutput('Note: This resume may be outdated. For the latest version, reach out or browse the portfolio (updated weekly).', 'normal');
+        window.open("/Shreyas's Resume.pdf", '_blank');
+      },
       history: () => {
         if (args[0] === '-c') {
           setCmdHistory([]);
@@ -299,10 +303,10 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
               </div>
               <div
                 className={`whitespace-pre-wrap select-text ${item.type === 'success'
-                    ? 'text-[hsl(var(--accent))]'
-                    : item.type === 'error'
-                      ? 'text-[hsl(var(--traffic-red))]'
-                      : 'text-[hsl(var(--text-strong))]'
+                  ? 'text-[hsl(var(--accent))]'
+                  : item.type === 'error'
+                    ? 'text-[hsl(var(--traffic-red))]'
+                    : 'text-[hsl(var(--text-strong))]'
                   }`}
               >
                 {item.text}
@@ -447,8 +451,8 @@ export const ASCIIConsole = ({ isOpen: externalOpen, onClose }: { isOpen?: boole
                     role="option"
                     aria-selected={i === selectedSuggestion}
                     className={`w-full px-3 py-1.5 text-left font-mono transition-all duration-100 ${i === selectedSuggestion
-                        ? 'bg-[rgba(34,197,94,0.15)] text-[#34d399] border-l-2 border-[#22c55e]'
-                        : 'text-[rgba(240,240,240,0.92)] hover:bg-[rgba(34,197,94,0.15)] hover:text-[#34d399] hover:border-l-2 hover:border-[#22c55e] border-l-2 border-transparent'
+                      ? 'bg-[rgba(34,197,94,0.15)] text-[#34d399] border-l-2 border-[#22c55e]'
+                      : 'text-[rgba(240,240,240,0.92)] hover:bg-[rgba(34,197,94,0.15)] hover:text-[#34d399] hover:border-l-2 hover:border-[#22c55e] border-l-2 border-transparent'
                       }`}
                     style={{
                       fontSize: '13px',

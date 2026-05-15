@@ -293,12 +293,6 @@ async def chat(message: ChatMessage):
                     "messages": messages_payload,
                 },
             )
-            if response.is_error:
-                logging.error(
-                    "OpenAI API error %s: %s",
-                    response.status_code,
-                    response.text,
-                )
             response.raise_for_status()
 
         data = response.json()

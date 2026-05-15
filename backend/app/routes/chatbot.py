@@ -293,6 +293,12 @@ async def chat(message: ChatMessage):
                     "messages": messages_payload,
                 },
             )
+            if response.is_error:
+                logging.error(
+                    "OpenAI API error %s: %s",
+                    response.status_code,
+                    response.text,
+                )
             response.raise_for_status()
 
         data = response.json()
@@ -310,8 +316,12 @@ async def chat(message: ChatMessage):
     except RuntimeError as re:
         raise HTTPException(status_code=500, detail=str(re))
     except httpx.HTTPStatusError as e:
-        status = e.response.status_code if e.response is not None else 500
-        detail = e.response.text if e.response is not None else str(e)
+        status = e.response.status_code
+        detail = e.response.text
+        if status == 401:
+            detail = "Unauthorized: verify OPENAI_API_KEY."
+        elif status == 429:
+            detail = "Rate limited by OpenAI. Please try again shortly."
         logging.exception("OpenAI API returned an error")
         raise HTTPException(status_code=500, detail=f"OpenAI API error ({status}): {detail}")
     except Exception as e:

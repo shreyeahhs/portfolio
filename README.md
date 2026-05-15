@@ -1,6 +1,6 @@
 # Shreyas Gowda — Portfolio
 
-A modern, terminal-inspired portfolio website designed with glassmorphism aesthetics, intelligent motion, and an integrated AI chatbot powered by Gemini (Google Generative AI).  
+A modern, terminal-inspired portfolio website designed with glassmorphism aesthetics, intelligent motion, and an integrated AI chatbot powered by OpenAI.  
 The interface blends developer console minimalism with smooth animations and data-driven components, all built through careful prompt engineering and front-end craftsmanship.
 
 ---
@@ -28,7 +28,7 @@ The project was **vibe-coded** and refined through **prompt-engineered component
 
 ### Backend
 - **Python FastAPI** — API framework for chat, projects, and contact modules  
-- **Gemini (Google Generative AI)** — AI conversational model powering the chatbot (via Generative Language API)  
+- **OpenAI API** — AI conversational model powering the chatbot  
 - **Uvicorn** — ASGI server for local and production deployment  
 - **CORS middleware** — Secure communication with the frontend  
 
@@ -80,7 +80,7 @@ Runs on **[http://localhost:5173](http://localhost:5173)**
 cd backend
 pip install -r requirements.txt
 cp .env.example .env
-# Add your GEMINI_API_KEY (or GOOGLE_API_KEY) to backend/.env
+# Add your OPENAI_API_KEY to backend/.env
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -102,8 +102,8 @@ VITE_API_URL=http://localhost:8000
 ```
 PORT=8000
 FRONTEND_ORIGIN=http://localhost:5173
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=chat-bison-001
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
 ```
 
 ---
@@ -116,7 +116,7 @@ A console-style UI that simulates command-line interactions, complete with mono 
 
 ### AI Chatbot
 
-Built using **Gemini (Google Generative AI)** via the Generative Language API, the chatbot answers questions about my work, technologies, and background. It supports conversational memory and adaptive tone.
+Built using the **OpenAI API**, the chatbot answers questions about my work, technologies, and background. It supports conversational memory and adaptive tone.
 
 ### Projects & Internships
 
@@ -170,7 +170,7 @@ Deploy easily via **Netlify**, **Vercel**, or directly through **[Lovable](https
 ### Backend
 
 Deploy with **Render**, **Railway**, or **Fly.io**.
-Ensure the environment variables are configured for CORS and the Gemini/Google API key.
+Ensure the environment variables are configured for CORS and the OpenAI API key.
 
 ---
 

@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import os
 import logging
 from typing import List, Optional, Dict, Any
-from google import genai
+import httpx
 
 router = APIRouter()
 
@@ -264,40 +264,56 @@ async def chat(message: ChatMessage):
             user_input = incoming
             history_items = (message.history or [])
 
-        # Build a single text payload combining system prompt, history, and latest user input.
-        parts: List[str] = ["SYSTEM PROMPT:\n", SYSTEM_PROMPT, "\n\n"]
-        if history_items:
-            parts.append("CONVERSATION HISTORY:\n")
-            for item in history_items[-20:]:
-                role = item.get("role", "user")
-                speaker = "Assistant" if role in ("assistant", "bot") else "User"
-                content = item.get("content", "")
-                parts.append(f"{speaker}: {content}\n")
-            parts.append("\n")
-
-        parts.append(f"User: {user_input}\n")
-        combined_text = "\n".join(parts)
-
-        # ✅ Gemini model using Google GenAI SDK
-        model = (
-            os.getenv("GEMINI_MODEL")
-            or os.getenv("GOOGLE_GEMINI_MODEL")
-            or "gemini-2.5-flash"
-        )
-
-        api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        model = os.getenv("OPENAI_MODEL") or "gpt-4o-mini"
+        api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
-            logging.error("GEMINI_API_KEY (or GOOGLE_API_KEY) is not set in environment")
-            raise RuntimeError("GEMINI_API_KEY is not configured")
+            logging.error("OPENAI_API_KEY is not set in environment")
+            raise RuntimeError("OPENAI_API_KEY is not configured")
 
-        logging.info("Calling Gemini API...")
-        client = genai.Client(api_key=api_key)
-        response = client.models.generate_content(model=model, contents=combined_text)
+        messages_payload: List[Dict[str, str]] = [{"role": "system", "content": SYSTEM_PROMPT}]
+        for item in history_items[-20:]:
+            role = item.get("role", "user")
+            mapped_role = "assistant" if role in ("assistant", "bot") else "user"
+            content = str(item.get("content", "")).strip()
+            if content:
+                messages_payload.append({"role": mapped_role, "content": content})
 
-        return ChatResponse(response=str(response.text))
+        messages_payload.append({"role": "user", "content": user_input})
+
+        logging.info("Calling OpenAI API...")
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": model,
+                    "messages": messages_payload,
+                },
+            )
+            response.raise_for_status()
+
+        data = response.json()
+        ai_text = (
+            data.get("choices", [{}])[0]
+            .get("message", {})
+            .get("content", "")
+            .strip()
+        )
+        if not ai_text:
+            raise RuntimeError("OpenAI returned an empty response")
+
+        return ChatResponse(response=ai_text)
 
     except RuntimeError as re:
         raise HTTPException(status_code=500, detail=str(re))
+    except httpx.HTTPStatusError as e:
+        status = e.response.status_code if e.response is not None else 500
+        detail = e.response.text if e.response is not None else str(e)
+        logging.exception("OpenAI API returned an error")
+        raise HTTPException(status_code=500, detail=f"OpenAI API error ({status}): {detail}")
     except Exception as e:
-        logging.exception("Error while calling Gemini chat API")
+        logging.exception("Error while calling OpenAI chat API")
         raise HTTPException(status_code=500, detail=f"Error processing chat: {str(e)}")

@@ -41,12 +41,12 @@ async def keep_alive_task(client: httpx.AsyncClient):
 async def lifespan(app: FastAPI):
     # Startup logic
     # Validate critical environment variables early and log helpful messages.
-    if not (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")):
+    if not os.getenv("OPENAI_API_KEY"):
         logging.warning(
-            "GEMINI_API_KEY (or GOOGLE_API_KEY) not set. The chatbot endpoint will return 500 until it's configured."
+            "OPENAI_API_KEY not set. The chatbot endpoint will return 500 until it's configured."
         )
     else:
-        logging.info("GEMINI_API_KEY found — chatbot ready.")
+        logging.info("OPENAI_API_KEY found — chatbot ready.")
     
     # Initialize shared AsyncClient
     async with httpx.AsyncClient(timeout=10.0) as client:

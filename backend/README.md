@@ -14,7 +14,7 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-3. Add your OpenAI API key to `.env` (set `OPENAI_API_KEY`)
+3. Add your Gemini API key to `.env` (set `GEMINI_API_KEY` or `GOOGLE_API_KEY`)
 
 ## Run
 

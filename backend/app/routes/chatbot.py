@@ -248,6 +248,35 @@ Your mission is to present Shreyas as a capable, skilled, and well-rounded Data 
 Provide accurate, polished, and helpful information that reflects his academic journey, technical expertise, projects, and experience."""
 
 
+def _build_gemini_contents(history_items: List[Dict[str, Any]], user_input: str) -> List[Dict[str, Any]]:
+    contents: List[Dict[str, Any]] = []
+
+    for item in history_items[-20:]:
+        role = item.get("role", "user")
+        mapped_role = "model" if role in ("assistant", "bot", "model") else "user"
+        content = str(item.get("content", "")).strip()
+        if content:
+            contents.append({"role": mapped_role, "parts": [{"text": content}]})
+
+    contents.append({"role": "user", "parts": [{"text": user_input}]})
+    return contents
+
+
+def _extract_gemini_text(data: Dict[str, Any]) -> str:
+    candidates = data.get("candidates", [])
+    if not candidates:
+        raise RuntimeError("Gemini returned no candidates")
+
+    content = candidates[0].get("content", {})
+    parts = content.get("parts", [])
+    text_chunks = [str(part.get("text", "")) for part in parts if part.get("text")]
+    ai_text = "".join(text_chunks).strip()
+    if not ai_text:
+        raise RuntimeError("Gemini returned an empty response")
+
+    return ai_text
+
+
 @router.post("", response_model=ChatResponse)
 async def chat(message: ChatMessage):
     try:
@@ -264,51 +293,37 @@ async def chat(message: ChatMessage):
             user_input = incoming
             history_items = (message.history or [])
 
-        model = os.getenv("OPENAI_MODEL") or "gpt-4o-mini"
-        api_key = os.getenv("OPENAI_API_KEY")
+        model = os.getenv("GEMINI_MODEL") or "gemini-1.5-flash"
+        api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
         if not api_key:
-            logging.error("OPENAI_API_KEY is not set in environment")
-            raise RuntimeError("OPENAI_API_KEY is not configured")
+            logging.error("GEMINI_API_KEY or GOOGLE_API_KEY is not set in environment")
+            raise RuntimeError("Gemini API key is not configured")
 
-        messages_payload: List[Dict[str, str]] = [{"role": "system", "content": SYSTEM_PROMPT}]
-        for item in history_items[-20:]:
-            role = item.get("role", "user")
-            mapped_role = "assistant" if role in ("assistant", "bot") else "user"
-            content = str(item.get("content", "")).strip()
-            if content:
-                messages_payload.append({"role": mapped_role, "content": content})
+        contents_payload = _build_gemini_contents(history_items, user_input)
 
-        messages_payload.append({"role": "user", "content": user_input})
-
-        logging.info("Calling OpenAI API...")
+        logging.info("Calling Gemini API...")
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
-                "https://api.openai.com/v1/chat/completions",
+                f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
                 headers={
-                    "Authorization": f"Bearer {api_key}",
                     "Content-Type": "application/json",
                 },
+                params={"key": api_key},
                 json={
-                    "model": model,
-                    "messages": messages_payload,
+                    "systemInstruction": {"parts": [{"text": SYSTEM_PROMPT}]},
+                    "contents": contents_payload,
                 },
             )
             if response.is_error:
                 logging.error(
-                    "OpenAI API error %s: %s",
+                    "Gemini API error %s: %s",
                     response.status_code,
                     response.text,
                 )
             response.raise_for_status()
 
         data = response.json()
-        choices = data.get("choices", [])
-        if not choices:
-            raise RuntimeError("OpenAI returned no choices")
-
-        ai_text = choices[0].get("message", {}).get("content", "").strip()
-        if not ai_text:
-            raise RuntimeError("OpenAI returned an empty response")
+        ai_text = _extract_gemini_text(data)
 
         return ChatResponse(response=ai_text)
 
@@ -318,11 +333,11 @@ async def chat(message: ChatMessage):
         status = e.response.status_code
         detail = e.response.text
         if status == 401:
-            detail = "Unauthorized: verify OPENAI_API_KEY."
+            detail = "Unauthorized: verify GEMINI_API_KEY or GOOGLE_API_KEY."
         elif status == 429:
-            detail = "Rate limited by OpenAI. Please try again shortly."
-        logging.exception("OpenAI API returned an error (%s): %s", status, detail)
-        raise HTTPException(status_code=500, detail=f"OpenAI API error ({status}): {detail}")
+            detail = "Rate limited by Gemini. Please try again shortly."
+        logging.exception("Gemini API returned an error (%s): %s", status, detail)
+        raise HTTPException(status_code=500, detail=f"Gemini API error ({status}): {detail}")
     except Exception as e:
-        logging.exception("Error while calling OpenAI chat API")
+        logging.exception("Error while calling Gemini chat API")
         raise HTTPException(status_code=500, detail=f"Error processing chat: {str(e)}")

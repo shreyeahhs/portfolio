@@ -140,6 +140,17 @@ const Projects = () => {
               <motion.div key={project.slug} variants={itemVariants}>
                 <GlassCard hover className="h-full flex flex-col">
                   <div className="space-y-4 flex-1">
+                    {project.cover && (
+                      <div className="relative aspect-video overflow-hidden rounded-md border border-border-color/50 bg-panel/60">
+                        <img
+                          src={project.cover}
+                          alt={`${project.title} preview`}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+
                     <div>
                       <div className="flex items-start justify-between mb-2">
                         <h3 className="font-mono font-semibold text-lg">

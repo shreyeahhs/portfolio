@@ -93,21 +93,17 @@ Model Deployment
 
 SECTION 3 — KEY PROJECTS (ACTIVE AND VERIFIED)
 
-EduDiagno
-
-AI-based interview and assessment system
-
-Backend: FastAPI
-
-Frontend: React + TypeScript
-
-Includes automated interview scoring, candidate analytics, and screening workflows
-
 YouTube Summarizer
 
 NLP-based tool that extracts transcripts and generates high-quality summaries
 
 Supports various summary formats depending on user needs
+
+Living Ecosystem Simulator
+
+Browser-based top-down wildlife simulation built with TypeScript and the Canvas 2D API
+
+Includes grass growth, predator-prey interactions, weather, fire, and disease systems
 
 NightOut Planner (Hackathon Project)
 

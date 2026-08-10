@@ -2,15 +2,18 @@ import { PinnedProject } from "@/components/PinnedProjects";
 
 export const pinnedProjectsData: PinnedProject[] = [
   {
-    title: "Edudiagno - AI Interview Platform",
-    slug: "edudiagno",
+    title: "Living Ecosystem Simulator",
+    slug: "living-ecosystem-simulator",
     summary:
-      "AI-powered interview and assessment platform built during Shreyas's internship at Technobeez. Features real-time speech recognition, sentiment analysis, and automated scoring. ~80% of the system was developed by Shreyas.",
-    tags: ["AI/ML", "Full-Stack", "Real-time"],
-    tech: ["Python", "FastAPI", "React", "TypeScript", "WebRTC", "Gemini", "PostgreSQL"],
+      "Browser-based top-down pixel-art wildlife simulation where grass, rabbits, foxes, hawks, weather, fire, and disease all interact through local ecosystem rules.",
+    tags: ["Simulation", "Interactive", "Canvas"],
+    tech: ["TypeScript", "Vite", "Canvas 2D API"],
     links: {
-      live: "https://edudiagno.com",
-      repo: "",
+      live: "https://living-ecosystem-simulator.onrender.com/",
+      repo: "https://github.com/shreyeahhs/Living-Ecosystem-Simulator",
+    },
+    media: {
+      image: "/project-previews/living-ecosystem-simulator.png",
     },
     theme: "dark",
   },

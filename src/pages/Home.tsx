@@ -13,7 +13,7 @@ import { Box } from "lucide-react";
 
 const Home = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const featuredProjects = projectsData.filter((p: Project) => p.featured).slice(0, 3);
+  const featuredProjects = projectsData.filter((p: Project) => p.featured).slice(0, 4);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -133,6 +133,17 @@ const Home = () => {
               {featuredProjects.map((project: Project) => (
                 <GlassCard key={project.slug} hover>
                   <div className="space-y-4">
+                    {project.cover && (
+                      <div className="relative aspect-video overflow-hidden rounded-md border border-border-color/50 bg-panel/60 mb-2">
+                        <img
+                          src={project.cover}
+                          alt={`${project.title} preview`}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+
                     <div>
                       <h3 className="font-mono font-semibold text-lg mb-2">
                         {project.title}

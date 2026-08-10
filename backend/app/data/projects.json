@@ -1,28 +1,24 @@
 [
   {
-    "title": "Edudiagno — AI Interview Platform",
-    "slug": "edudiagno",
-    "summary": "Real-time AI-powered interview and assessment platform built during an internship at Technobeez. Shreyas developed ~80% of the system, including backend APIs, scoring logic, and AI-driven interview workflows.",
-    "year": 2025,
+    "title": "Living Ecosystem Simulator",
+    "slug": "living-ecosystem-simulator",
+    "summary": "Browser-based top-down pixel-art wildlife simulation built with TypeScript and the Canvas 2D API. Grass grows, rabbits graze, foxes hunt, hawks patrol, and weather, fire, and disease all emerge from local rules.",
+    "year": 2026,
     "tags": [
-      "AI/ML",
-      "Full-Stack",
-      "Real-time"
+      "Simulation",
+      "Interactive",
+      "Canvas"
     ],
     "tech": [
-      "Python",
-      "FastAPI",
-      "React",
       "TypeScript",
-      "WebRTC",
-      "Gemini",
-      "PostgreSQL",
-      "AWS",
-      "Docker"
+      "Vite",
+      "Canvas 2D API"
     ],
     "featured": true,
+    "cover": "/project-previews/living-ecosystem-simulator.png",
     "links": {
-      "live": "https://www.edudiagno.com"
+      "live": "https://living-ecosystem-simulator.onrender.com/",
+      "repo": "https://github.com/shreyeahhs/Living-Ecosystem-Simulator"
     }
   },
   {

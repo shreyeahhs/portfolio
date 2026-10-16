@@ -1,193 +1,107 @@
-# Shreyas Gowda — Portfolio
+# shreyeahhs
 
-A modern, terminal-inspired portfolio website designed with glassmorphism aesthetics, intelligent motion, and an integrated AI chatbot powered by Gemini.  
-The interface blends developer console minimalism with smooth animations and data-driven components, all built through careful prompt engineering and front-end craftsmanship.
+Personal site for Shreyas, administrator at the Centre for Data Science and AI,
+University of Glasgow.
 
----
+A single page: who I am, what I've built, a few Power BI dashboards, my prompt
+engineering course, where I've worked, and a chatbot that can answer questions about
+all of it. The ecosystem simulator in the hero runs live from its own deployment.
 
-## Overview
+One Next.js app: the page and its two API routes (contact form and chatbot) deploy
+together to Vercel. There is no separate backend.
 
-This portfolio serves as an interactive showcase of my work in **AI, Data Science, and Full-Stack Development**, featuring:
-- A **scroll-synced projects section** inspired by `factory.ai`
-- A **draggable AI chatbot** that answers queries about my background, projects, and experience
-- A **command-line interface (CLI mode)** for hidden interactions and navigation
-- A focus on **clean UI motion**, **semantic accessibility**, and **performance**
-
-The project was **vibe-coded** and refined through **prompt-engineered component generation**, ensuring a natural fusion between design intent and functional precision.
-
----
-
-## Tech Stack
-
-### Frontend
-- **React + TypeScript + Vite** — Core framework and build tool  
-- **Tailwind CSS + Framer Motion** — Styling and animation  
-- **shadcn-ui** — Component styling and accessibility utilities  
-- **React Router** — Page routing and transitions  
-- **Custom hooks and context** for theme, console, and chat state  
-
-### Backend
-- **Python FastAPI** — API framework for chat, projects, and contact modules  
-- **Gemini API** — AI conversational model powering the chatbot  
-- **Uvicorn** — ASGI server for local and production deployment  
-- **CORS middleware** — Secure communication with the frontend  
-
----
-
-## Project Structure
-
-```
-
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── hooks/
-│   │   ├── data/
-│   │   └── styles/
-│   ├── public/
-│   └── vite.config.ts
-│
-├── backend/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── routers/
-│   │   ├── models/
-│   │   └── services/
-│   ├── requirements.txt
-│   └── .env.example
-│
-└── README.md
-
-````
-
----
-
-## Setup and Development
-
-### Frontend Setup
+## Running it
 
 ```bash
 npm install
+cp .env.example .env.local   # then fill it in
 npm run dev
-````
-
-Runs on **[http://localhost:5173](http://localhost:5173)**
-
-### Backend Setup
-
-```bash
-cd backend
-pip install -r requirements.txt
-cp .env.example .env
-# Add your GEMINI_API_KEY to backend/.env
-uvicorn app.main:app --reload --port 8000
 ```
 
-Runs on **[http://localhost:8000](http://localhost:8000)**
-API documentation available at **[http://localhost:8000/docs](http://localhost:8000/docs)**
+Site and API on `http://localhost:3000`. Without the Gemini key the chatbot says it
+isn't answering; without the Brevo settings the contact form says it couldn't send.
 
----
+| Script | What it does |
+|---|---|
+| `npm run dev` | Dev server with hot reload |
+| `npm run build` | Production build (also type-checks) |
+| `npm run start` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript, no emit |
 
-## Environment Variables
+## Stack
 
-### Frontend (`.env`)
+Next.js 16 (App Router), React 19, TypeScript, Tailwind v4 (CSS-first config, no
+`tailwind.config`), Motion for animation, Phosphor for icons, Geist and Geist Mono
+self-hosted through `@fontsource-variable`. The API routes relay to Brevo for
+contact email and Google Gemini for the assistant.
 
-```
-VITE_API_URL=http://localhost:8000
-```
+The page is server-rendered and prerendered at build time, then hydrates. Components
+are client components (`src/Site.tsx` is the boundary), so anything that reads the
+browser has to do it in an effect or through `useSyncExternalStore`, never during
+render. `src/lib/theme.ts` and `src/lib/motion.ts` show the pattern.
 
-### Backend (`backend/.env`)
+## Where things live
 
-```
-PORT=8000
-FRONTEND_ORIGIN=http://localhost:5173
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-1.5-flash
-```
+| Path | What it is |
+|---|---|
+| `src/data/content.ts` | **Every fact on the site.** Edit here, not in components |
+| `src/app/layout.tsx` | `<head>`: title, description, share image, theme script |
+| `src/Site.tsx` | The page, section by section |
+| `src/components/` | One file per section, plus shared pieces |
+| `src/index.css` | Design tokens, both themes, base and utilities |
+| `src/app/api/chat/route.ts` | Gemini relay, with retries and model fallback |
+| `src/app/api/contact/route.ts` | Contact form: validation and Brevo sending |
+| `src/server/chat-prompt.ts` | The assistant's system prompt |
+| `src/server/emails.ts` | The two contact emails, HTML and plain text |
+| `src/server/limiter.ts` | Rate limiting for both API routes |
+| `PRODUCT.md` | Product truth: users, positioning, constraints |
+| `CONTENT.md` | Full content inventory, including what was retired |
+| `DESIGN.md` | The built design system, recorded from the code |
 
----
+The assistant's system prompt duplicates biography from `content.ts` by
+necessity. **If you change a role, a date or a project, change it in both places.**
 
-## Core Features
+## Environment
 
-### Terminal-Inspired Interface
-
-A console-style UI that simulates command-line interactions, complete with mono typography, neon accents, and smooth scroll-sync between sections.
-
-### AI Chatbot
-
-Built using the **Gemini API**, the chatbot answers questions about my work, technologies, and background. It supports conversational memory and adaptive tone.
-
-### Projects & Internships
-
-Dynamic data-driven components display live project and internship details pulled from JSON or API endpoints.
-Each section uses **Framer Motion** for reveal animations and maintains a consistent visual hierarchy.
-
-### Experience Timeline
-
-Innovative vertical layout that adapts dynamically to show parallel experiences.
-Built for clarity, accessibility, and clean animation.
-
-### Contact Section
-
-Validates form inputs client-side before sending POST requests to the FastAPI backend.
-Includes error handling and success toasts.
-
-### Console Easter Egg
-
-Press `/` to open a hidden **ASCII console** supporting commands such as:
+See `.env.example`. Locally these go in `.env.local`; on Vercel, under Project
+Settings → Environment Variables.
 
 ```
-whoami
-theme dark|light|neon
-sudo hire shreyas
-fortune
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-flash-latest
+GEMINI_FALLBACK_MODEL=gemini-flash-lite-latest
+BREVO_API_KEY=
+CONTACT_FROM_EMAIL=
+CONTACT_FROM_NAME=Shreyas
+CONTACT_TO_EMAIL=
+UPSTASH_REDIS_REST_URL=      # optional, see rate limiting
+UPSTASH_REDIS_REST_TOKEN=
 ```
 
-The console is fully keyboard accessible and non-blocking to the rest of the page.
+## API
 
----
+| Endpoint | Method | Notes |
+|---|---|---|
+| `/api/health` | GET | Health check |
+| `/api/contact` | POST | 5 per 10 minutes per address, 50 per day in total |
+| `/api/chat` | POST | 20 per 5 minutes per address |
 
-## API Endpoints
+If Gemini is busy (it returns 503 at peak times) the chat retries once, then falls
+back to `GEMINI_FALLBACK_MODEL`; a model that answers 404 is skipped straight away.
+The API key is sent as a header, never in the URL.
 
-| Endpoint               | Method | Description            |
-| ---------------------- | ------ | ---------------------- |
-| `/api/health`          | GET    | Health check           |
-| `/api/projects`        | GET    | List all projects      |
-| `/api/projects/{slug}` | GET    | Get project by slug    |
-| `/api/internships`     | GET    | List all internships   |
-| `/api/contact`         | POST   | Submit contact form    |
-| `/api/chat`            | POST   | Chat with AI assistant |
+**Rate limiting.** Vercel runs the API on many short-lived instances, so counts kept
+in memory only limit what one instance sees. Add an Upstash Redis database (Vercel
+Marketplace, free tier) and the counts are shared by every instance; the integration
+sets the variables for you. Without it the limits still apply, per instance.
 
----
+## Deploying
 
-## Deployment
+Push to the branch Vercel builds from. `vercel.json` pins the framework to Next.js,
+so the project's old Vite settings don't apply. Set the environment variables above
+in Vercel first.
 
-### Frontend
+## Licence
 
-Deploy easily via **Netlify**, **Vercel**, or directly through **[Lovable](https://lovable.dev/projects/87dca356-5a55-4783-850f-6c8c60e4ce4e)**.
-
-### Backend
-
-Deploy with **Render**, **Railway**, or **Fly.io**.
-Ensure the environment variables are configured for CORS and the Gemini API key.
-
----
-
-## Design Notes
-
-* Built with **glassmorphism** for layered depth and modern feel.
-* Backgrounds feature subtle **slanted diagonal patterns** for texture.
-* Animations respect `prefers-reduced-motion` for accessibility.
-* Fully responsive for all breakpoints (mobile-first).
-* No UI frameworks beyond **TailwindCSS** and **shadcn**, ensuring total control over the design system.
-
----
-
-## License
-
-MIT License — Free to use, fork, and modify with credit.
-
----
-
-Built with ❤️ by **Shreyas Gowda**
+MIT for the code. The Power BI datasets keep their original source licences.

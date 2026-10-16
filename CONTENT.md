@@ -139,8 +139,8 @@ needs; rewrite the README") deleted all 7 test files and the vitest config befor
 was published, so **the public repo has no test suite and `vitest` is not a dependency**.
 The tests were real and were written during development, but the site cannot claim them,
 because the link next to the claim lets anyone check. The stats on the page are
-*1 endpoint · 0 keys stored · MIT licence*: structural, so they do not rot, and both
-numbers come from the brief. Do not reintroduce a line count. If the tests are ever put
+*1 endpoint · MIT licence*: structural, so they do not rot. (*0 keys stored* was printed too
+until 16 Oct 2026, and dropped with *0 guessed times* on Vele: zero-stats read as slogans.) Do not reintroduce a line count. If the tests are ever put
 back in the public repo, *139 tests* can come back with them.
 
 **Links.** `links.juggle` is the repo. `links.juggleLive` is

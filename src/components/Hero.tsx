@@ -18,8 +18,8 @@ const railItem = (i: number) =>
   i < 2 ? "flex" : i < 3 ? "hidden sm:flex" : i < 6 ? "hidden lg:flex" : "hidden xl:flex";
 
 /**
- * The first screen. One sentence, set as large as the page allows, with the
- * shrug in the accent underneath it; the running simulation alongside; and a rail of
+ * The first screen. One sentence, set as large as the page allows; the running
+ * simulation alongside; and a rail of
  * plain facts across the foot, so a visitor who never scrolls still leaves
  * knowing who this is.
  *
@@ -60,23 +60,6 @@ export function Hero() {
             <h1 className="mt-6 text-ink">
               <motion.span {...rise(0.05)} className="display d1 block">
                 {profile.headline}
-              </motion.span>
-              <motion.span {...rise(0.12)} className="mt-2 block">
-                <motion.span
-                  className="display d1 inline-block origin-[45%_85%] text-accent"
-                  animate={
-                    reduce
-                      ? undefined
-                      : { rotate: [0, -5, 3.5, -1.5, 0], transition: { delay: 1.7, duration: 0.9 } }
-                  }
-                  whileHover={
-                    reduce
-                      ? undefined
-                      : { rotate: [0, -5, 3.5, -1.5, 0], transition: { duration: 0.8 } }
-                  }
-                >
-                  {profile.headlineAside}
-                </motion.span>
               </motion.span>
             </h1>
 

@@ -159,7 +159,7 @@ export function Vele() {
             </p>
 
             <p className="mt-7 text-[14px] leading-relaxed text-ink-faint">
-              What the engine weighs before it offers you anything:
+              What the scheduling engine takes into account:
             </p>
             <ul className="mt-3 flex flex-wrap items-center gap-y-1.5 text-[13.5px] text-ink-soft">
               {vele.weighs.map((name) => (

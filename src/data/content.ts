@@ -17,7 +17,6 @@ export const profile = {
   email: "gowdashreyas364@gmail.com",
   avatar: "/avatar.png",
   headline: "I don’t even know why I have a portfolio website at this point.",
-  headlineAside: "Oh well.",
   standfirst:
     "I work at the Centre for Data Science and AI at the University of Glasgow, where I also did my MSc. This is where I keep the stuff I’ve made.",
 };
@@ -50,7 +49,7 @@ export const glance = [
 export const bio = [
   "I did my engineering degree in AI and data science in Karnataka, then moved to Glasgow for my MSc and stayed. These days I work at the university’s Centre for Data Science and AI, on the admin side.",
   "Before this, most of my jobs were about data. I analysed carbon footprint data at Publicis Sapient, cleaned up map data at GraphGeo, and spent most of 2025 building the backend for an AI interview platform.",
-  "Outside work I’m building Vele, a calendar you can talk to, and Juggle, a gateway that juggles my AI keys. I also write about how AI models actually work, and buy more Hot Wheels than I have space for.",
+  "Outside work I’m building Vele, a calendar you can talk to, and Juggle, a gateway that juggles my AI keys. I also write about how AI models work, and buy more Hot Wheels than I have space for.",
 ];
 
 export const links = {
@@ -90,12 +89,12 @@ export const corpus = {
   title: "Prompt Corpus",
   url: links.corpus,
   description:
-    "A free course I wrote on prompt engineering. It starts with how these models actually work, so the techniques make sense instead of feeling like tricks you have to memorise.",
+    "A free course I wrote on prompt engineering. It starts with how language models work, then builds the techniques on top of that.",
   aside:
-    "No videos, no prompt packs to buy. Just the lessons, written out in full, and where every claim came from.",
+    "It’s free to read. You make an account so it can keep track of where you are.",
   stats: [
     { value: "60", label: "lessons" },
-    { value: "98", label: "sources cited" },
+    { value: "98", label: "sources" },
     { value: "6h", label: "of reading" },
   ],
   tracks: [
@@ -103,10 +102,10 @@ export const corpus = {
     { id: "01", name: "Beginner", count: 8, note: "What a good prompt looks like, and the mistakes almost everyone makes." },
     { id: "02", name: "Intermediate", count: 7, note: "Roles, system messages, step-by-step reasoning and structured output." },
     { id: "03", name: "Advanced", count: 9, note: "Chaining prompts, agents and tools, and defending against prompt injection." },
-    { id: "04", name: "Model Playbooks", count: 6, note: "What’s actually different between Claude, GPT, Gemini and the rest." },
+    { id: "04", name: "Model Playbooks", count: 6, note: "How Claude, GPT, Gemini and the others differ." },
     { id: "05", name: "For Students", count: 7, note: "Using AI for coursework without letting it do your thinking." },
     { id: "06", name: "At Work", count: 5, note: "Practical guides for writing, code, analysis and research." },
-    { id: "07", name: "Cost of a Prompt", count: 6, note: "What a prompt really costs in tokens, money and energy." },
+    { id: "07", name: "Cost of a Prompt", count: 6, note: "What a prompt costs in tokens, money and energy." },
   ],
 };
 
@@ -121,11 +120,10 @@ export const vele = {
   description:
     "You write it a sentence — “lunch with mom, 1 to 3 on Saturday” — and it pencils the event in. Anything with other people in it, or a clash, or a repeat, stays in pencil until you say yes.",
   aside:
-    "The model only reads the sentence. Every actual time comes from a plain scheduling engine that knows my hours, my buffers and my lunch. It is the argument above, in code.",
+    "The AI model reads the sentence. The times come from a separate scheduling engine that knows my working hours, buffers and lunch.",
   stats: [
     { value: "5", label: "calendar views" },
     { value: "2", label: "ways to ask" },
-    { value: "0", label: "guessed times" },
   ],
   /** What the engine weighs before it offers you anything. */
   weighs: [
@@ -171,17 +169,16 @@ export const juggle = {
   live: links.juggleLive,
   claim: "A gateway that juggles your API keys.",
   description:
-    "Free-tier AI keys are rate limited, so you end up holding a handful of them and swapping between them by hand. Juggle makes that a piece of infrastructure instead of a chore: your keys go in its environment, your app points at one OpenAI-compatible endpoint, and nothing else changes.",
+    "Free-tier AI keys are rate limited, so you end up holding a handful of them and swapping between them by hand. Juggle does the swapping for you. Your keys go in its settings, and your app calls one OpenAI-compatible endpoint.",
   aside:
-    "It moves to a different key on every request rather than waiting for one to fail, so a throttled key is usually out of the way before it matters. Your app gets one clean response instead of a 429.",
+    "It uses a different key for each request. When one gets throttled, the request moves on to the next key, so your app still gets an answer.",
   stats: [
     { value: "1", label: "endpoint" },
-    { value: "0", label: "keys stored" },
     { value: "MIT", label: "licence" },
   ],
   stack: ["Next.js 16", "React 19", "Drizzle", "Postgres", "Zod 4"],
   /** Gemini is the only adapter today, and the page says so rather than implying more. */
-  providers: "Gemini today. A provider is an adapter behind one interface, so the rest is mostly error mapping.",
+  providers: "It works with Gemini for now. Other providers can be added as adapters.",
 };
 
 /* --------------------------------------------------------------------------
@@ -203,7 +200,7 @@ export const projects: Project[] = [
     title: "Living Ecosystem Simulator",
     year: 2026,
     blurb:
-      "A small wildlife sim that runs in the browser. Grass grows, rabbits eat it, foxes eat the rabbits and hawks circle overhead. Nothing is scripted, so sometimes it balances out and sometimes everything dies.",
+      "A small wildlife sim that runs in the browser. Grass grows, rabbits eat it, foxes eat the rabbits and hawks circle overhead. It all runs on simple rules, so some runs balance out and some end with everything dead.",
     stack: ["TypeScript", "Vite", "Canvas 2D"],
     repo: "https://github.com/shreyeahhs/Living-Ecosystem-Simulator",
     live: "https://living-ecosystem-simulator.onrender.com/",
@@ -213,7 +210,7 @@ export const projects: Project[] = [
     title: "Twin Engine",
     year: 2024,
     blurb:
-      "Predicts how long a jet engine has left before it needs work, using NASA’s turbofan dataset. It gives you a range rather than a single guess.",
+      "Predicts how long a jet engine has left before it needs work, using NASA’s turbofan dataset. Each prediction comes with a likely range.",
     stack: ["React", "FastAPI", "Scikit-Learn"],
     repo: "https://github.com/shreyeahhs/digital-twin-jet-engine",
   },
@@ -237,7 +234,7 @@ export const projects: Project[] = [
     title: "JLR EV Launch Delay",
     year: 2025,
     blurb:
-      "What happens to Jaguar Land Rover if an electric car launches late? A model of the lost revenue and the customers who go elsewhere, built on made-up but realistic data.",
+      "What happens to Jaguar Land Rover if an electric car launches late? A model of the lost revenue and the customers who go elsewhere, using synthetic data.",
     stack: ["Python", "Pandas", "YAML"],
     repo: "https://github.com/shreyeahhs/jlr-launch-delay-analysis",
   },
@@ -347,7 +344,7 @@ export const roles: Role[] = [
     to: "Mar 2026",
     notes: [
       "Helped students and staff with IT problems.",
-      "Showed people what the university’s IT services could actually do for them.",
+      "Showed students and staff what the university’s IT services offer.",
     ],
     tools: ["IT support", "Events"],
   },
@@ -384,7 +381,7 @@ export const roles: Role[] = [
     to: "Dec 2024",
     notes: [
       "Worked with large sustainability and operations datasets for client projects.",
-      "Built KPI dashboards so different teams could actually see their numbers.",
+      "Built KPI dashboards for teams across the business.",
     ],
     tools: ["Python", "SQL", "Power BI", "Snowflake"],
   },
@@ -454,7 +451,7 @@ export const interests: Interest[] = [
   {
     title: "Vibe coding",
     body:
-      "I build a lot of small apps just by prompting AI. Most of them get thrown away, and that’s fine. A few turn into something.",
+      "I build a lot of small apps by prompting AI. Most get thrown away. A few turn into something.",
     span: "tall",
   },
   {

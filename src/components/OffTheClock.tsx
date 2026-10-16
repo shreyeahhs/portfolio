@@ -39,7 +39,7 @@ export function OffTheClock() {
         <Reveal className="flex flex-wrap items-end justify-between gap-x-12 gap-y-5">
           <h2 className="display d-loud">Outside work.</h2>
           <p className="max-w-[34ch] text-[1.0625rem] leading-relaxed text-hw-ink/85">
-            The stuff I actually spend my evenings on.
+            What I spend my evenings on.
           </p>
         </Reveal>
 

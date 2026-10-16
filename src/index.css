@@ -663,23 +663,6 @@
   }
 }
 
-/* "Oh well." shrugs. */
-@keyframes shrug {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-5deg);
-  }
-  55% {
-    transform: rotate(3.5deg);
-  }
-  80% {
-    transform: rotate(-1.5deg);
-  }
-}
-
 /* Snow for the Glasgow snow project. */
 @keyframes fall {
   from {

@@ -31,7 +31,3 @@ next-env.d.ts
 *.tsbuildinfo
 .vercel
 
-# Python (the retired backend)
-__pycache__/
-*.pyc
-backend/venv/

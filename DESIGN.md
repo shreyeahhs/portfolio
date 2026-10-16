@@ -319,8 +319,6 @@ Hot Wheels orange (`--color-hw`, `#f26a1b`, fixed across both themes).
   chapters for the YouTube summariser. Illustrations are drawn from the icon set,
   never fake interface screenshots; the simulator uses its real screenshot. On small
   screens the preview opens inline under the chosen title.
-- **"Oh well."** sits on its own line in the accent, at the same size as the
-  sentence above it, and shrugs once shortly after load and again on hover.
 - **The live badge**: the simulator's plate carries a pulsing dot marked Live.
   It is not decoration — the thing behind that poster really is running, and
   pressing play opens it.

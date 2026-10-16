@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Existing codebase answers this. One Next.js 16 app (App Router, React 19, TypeScript, Tailwind v4) deployed on Vercel: the page plus two API routes, the contact-email relay (Brevo) and the chatbot relay (Google Gemini). Until October 2026 those routes were a separate Python FastAPI service on Render (`portfolio-anfe.onrender.com`); it was ported to Next.js route handlers so the whole site deploys as one project. The old code is still in `backend/` until the Vercel deployment is confirmed, then it can go.
+Existing codebase answers this. One Next.js 16 app (App Router, React 19, TypeScript, Tailwind v4) deployed on Vercel: the page plus two API routes, the contact-email relay (Brevo) and the chatbot relay (Google Gemini). Until October 2026 those routes were a separate Python FastAPI service on Render (`portfolio-anfe.onrender.com`); it was ported to Next.js route handlers so the whole site deploys as one project. The Python code was removed once the Vercel deployment was live.
 
 ## Users
 

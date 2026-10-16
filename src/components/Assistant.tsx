@@ -146,8 +146,7 @@ export function Assistant() {
         <Reveal>
           <h2 className="display d2 text-ink">Rather just ask?</h2>
           <p className="mt-4 max-w-[52ch] text-[1.0625rem] leading-[1.75] text-ink-soft">
-            This chatbot knows everything on this page. Ask it whatever you like about
-            me.
+            Ask the chatbot anything about me. It answers from what&rsquo;s on this page.
           </p>
         </Reveal>
 

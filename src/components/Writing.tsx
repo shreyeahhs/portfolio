@@ -59,13 +59,12 @@ function CorpusPlate() {
         ))}
       </ul>
 
-      {/* The site's own summing-up line, kept in its words. */}
+      {/* The totals, under the list they add up. */}
       <p className="border-t border-line px-5 py-4 text-[13.5px] leading-relaxed text-ink-soft">
         <span className="font-medium text-ink">
           {corpus.stats[1].value} {corpus.stats[1].label}
-        </span>{" "}
-        across roughly <span className="font-medium text-ink">{corpus.stats[2].value}</span> of
-        reading. Free, and nothing is a placeholder.
+        </span>
+        , about <span className="font-medium text-ink">{corpus.stats[2].value}</span> of reading.
       </p>
     </div>
   );
@@ -115,7 +114,7 @@ export function Writing() {
           <Reveal delay={0.08} className="lg:col-span-7">
             <CorpusPlate />
             <p className="meta mt-3 text-ink-faint">
-              The curriculum, in Prompt Corpus&rsquo;s own colours and type
+              The Prompt Corpus curriculum
             </p>
           </Reveal>
         </div>

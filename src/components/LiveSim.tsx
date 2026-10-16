@@ -103,7 +103,7 @@ export function LiveSim() {
         </div>
 
         <figcaption className="mt-3 text-[13px] leading-relaxed text-ink-faint">
-          My ecosystem simulator, running for real. Press play and watch it eat itself.
+          My ecosystem simulator. Press play to start it.
         </figcaption>
       </figure>
 

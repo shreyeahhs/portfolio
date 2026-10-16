@@ -1,217 +1,901 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+@import "@fontsource-variable/geist/index.css";
+@import "@fontsource-variable/geist-mono/index.css";
 
-@layer base {
-  :root {
-    /* Safe area insets for mobile devices */
-    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-    
-    /* Terminal-style color system */
-    --bg: 210 29% 8%;           /* #0B0F14 - near-black */
-    --panel: 210 33% 9%;        /* #0E141B - deep navy */
-    --glass: 0 0% 100% / 0.06;  /* rgba(255,255,255,0.06) */
-    --border-color: 0 0% 100% / 0.12;
-    --grid-stroke: 0 0% 100% / 0.04;
-    
-    /* Emerald accent system */
-    --accent: 142 71% 45%;      /* #22c55e - emerald-500 */
-    --accent-glow: 158 64% 52%; /* #34d399 - emerald-400 */
-    --accent-dark: 142 76% 36%; /* emerald-600 */
-    --accent-muted: 142 71% 45% / 0.2;
-    
-    /* Orange accent for rail navigation */
-    --accent-orange: 22 93% 55%;      /* #ff7a1a - vibrant orange */
-    --accent-orange-glow: 22 93% 55% / 0.4;
-    
-    /* Neon green accent */
-    --accent-green: 142 71% 45%;
-    
-    /* Text hierarchy */
-    --text-strong: 218 11% 90%;  /* #E5E7EB */
-    --text-muted: 214 13% 64%;   /* #9BA3AF */
-    --text-subtle: 214 13% 44%;
-    
-    /* Traffic light colors */
-    --traffic-red: 4 90% 58%;    /* #FF5F57 */
-    --traffic-yellow: 45 99% 58%; /* #FEBC2E */
-    --traffic-green: 122 61% 45%; /* #28C840 */
+/* Two of the things on this page are real products with their own typefaces.
+   Loaded only because the specimens below are set in them. */
+@import "@fontsource-variable/literata/index.css";
+@import "@fontsource-variable/libre-franklin/index.css";
 
-    /* Standard tokens for compatibility */
-    --background: 210 29% 8%;
-    --foreground: 218 11% 90%;
-    --card: 210 33% 9%;
-    --card-foreground: 218 11% 90%;
-    --popover: 210 33% 9%;
-    --popover-foreground: 218 11% 90%;
-    --primary: 142 71% 45%;
-    --primary-foreground: 210 29% 8%;
-    --secondary: 210 33% 15%;
-    --secondary-foreground: 218 11% 90%;
-    --muted: 210 33% 15%;
-    --muted-foreground: 214 13% 64%;
-    --accent-color: 142 71% 45%;
-    --accent-foreground: 210 29% 8%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 218 11% 90%;
-    --border: 0 0% 100% / 0.12;
-    --input: 0 0% 100% / 0.12;
-    --ring: 142 71% 45%;
-    --radius: 1rem;
+/* ---------------------------------------------------------------------------
+   Tokens. One palette: cool zinc neutrals, one burnt-orange accent.
+   Light is the default scene; dark is a full parity theme, not an afterthought.
+   --------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --c-page: #fafafa;
+  --c-surface: #ffffff;
+  --c-raised: #f4f4f5;
+  --c-sunken: #f0f0f1;
+
+  --c-ink: #17171a;
+  --c-ink-soft: #52525b;
+  --c-ink-faint: #63636b;
+
+  --c-line: #e4e4e7;
+  --c-line-strong: #c9c9ce;
+
+  --c-accent: #b83d0a;
+  --c-accent-hover: #9a3412;
+  --c-accent-ink: #ffffff;
+  --c-accent-wash: #fdf0e8;
+  --c-accent-line: #f0c2a6;
+
+  --c-shadow: 24 24 27;
+
+  /* Ambient light. Pale enough that every text colour stays AA at the brightest point. */
+  --c-glow-warm: #f8c9a8;
+  --c-glow-cool: #c5d1e6;
+  --glow-mult: 0.75;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-opacity: 0.05;
+
+  /* ---- Display ladder. One scale, used everywhere, capped so nothing clips. ---- */
+  --display-1: clamp(2.35rem, 5.2vw, 4.5rem); /* the page's one statement */
+  --display-2: clamp(1.95rem, 3.4vw, 2.9rem); /* section titles */
+  --display-3: clamp(1.4rem, 2.1vw, 1.8rem); /* sub-titles inside a section */
+  --display-loud: clamp(2.75rem, 7vw, 4.75rem); /* the orange block only */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --c-page: #0c0c0d;
+    --c-surface: #121214;
+    --c-raised: #19191c;
+    --c-sunken: #09090a;
+
+    --c-ink: #f4f4f5;
+    --c-ink-soft: #a1a1aa;
+    --c-ink-faint: #93939c;
+
+    --c-line: #26262a;
+    --c-line-strong: #3a3a41;
+
+    --c-accent: #fb8244;
+    --c-accent-hover: #fd9a66;
+    --c-accent-ink: #1a0d05;
+    --c-accent-wash: #1e1210;
+    --c-accent-line: #45291d;
+
+    --c-shadow: 0 0 0;
+
+    --c-glow-warm: #6e3317;
+    --c-glow-cool: #2b3a57;
+    --glow-mult: 1;
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --grain-opacity: 0.04;
   }
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --c-page: #0c0c0d;
+  --c-surface: #121214;
+  --c-raised: #19191c;
+  --c-sunken: #09090a;
+
+  --c-ink: #f4f4f5;
+  --c-ink-soft: #a1a1aa;
+  --c-ink-faint: #93939c;
+
+  --c-line: #26262a;
+  --c-line-strong: #3a3a41;
+
+  --c-accent: #fb8244;
+  --c-accent-hover: #fd9a66;
+  --c-accent-ink: #1a0d05;
+  --c-accent-wash: #1e1210;
+  --c-accent-line: #45291d;
+
+  --c-shadow: 0 0 0;
+
+  --c-glow-warm: #6e3317;
+  --c-glow-cool: #2b3a57;
+  --glow-mult: 1;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-opacity: 0.04;
+}
+
+@theme inline {
+  --color-page: var(--c-page);
+  --color-surface: var(--c-surface);
+  --color-raised: var(--c-raised);
+  --color-sunken: var(--c-sunken);
+
+  --color-ink: var(--c-ink);
+  --color-ink-soft: var(--c-ink-soft);
+  --color-ink-faint: var(--c-ink-faint);
+
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+
+  --color-accent: var(--c-accent);
+  --color-accent-hover: var(--c-accent-hover);
+  --color-accent-ink: var(--c-accent-ink);
+  --color-accent-wash: var(--c-accent-wash);
+  --color-accent-line: var(--c-accent-line);
+
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SF Mono", monospace;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--c-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* The background map (Terrain.tsx) spans the whole document from in here. */
+  #root {
+    position: relative;
   }
 
   body {
-    @apply bg-[hsl(var(--bg))] text-[hsl(var(--text-strong))] font-['Inter',sans-serif] antialiased;
-    font-feature-settings: 'liga' 1, 'calt' 1;
+    background-color: var(--c-page);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-['JetBrains_Mono',monospace];
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Browser surfaces carry the design too. */
+  ::selection {
+    background-color: var(--c-accent);
+    color: var(--c-accent-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--c-accent);
+  }
+
+  ::placeholder {
+    color: var(--c-ink-faint);
+    opacity: 1;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-line-strong) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--c-line-strong);
+    border-radius: 999px;
+    border: 3px solid var(--c-page);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--c-ink-faint);
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
   }
 }
 
 @layer utilities {
-  /* Grid background utility */
-  .bg-grid {
-    background-image: 
-      linear-gradient(to right, hsl(var(--grid-stroke)) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--grid-stroke)) 1px, transparent 1px),
-      radial-gradient(ellipse at center, hsl(var(--panel)) 0%, hsl(var(--bg)) 100%);
-    background-size: 24px 24px, 24px 24px, 100% 100%;
-    background-position: 0 0, 0 0, center center;
+  /*
+   * The display voice. Geist carries every statement the page makes as well as
+   * everything you read at length; Geist Mono carries measured values. One face
+   * doing both jobs is why the display sizes are set tight and heavy — that, not
+   * a second typeface, is what separates a statement from a paragraph here.
+   */
+  .display {
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
-  
-  /* Diagonal grid background for factory-style sections */
-  .bg-grid-diagonal {
-    background-image: 
-      repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 20px,
-        hsl(var(--grid-stroke)) 20px,
-        hsl(var(--grid-stroke)) 21px
-      ),
-      repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 20px,
-        hsl(var(--grid-stroke)) 20px,
-        hsl(var(--grid-stroke)) 21px
-      ),
-      radial-gradient(ellipse at center, hsl(var(--panel)) 0%, hsl(var(--bg)) 100%);
+
+  .d1 {
+    font-size: var(--display-1);
+    line-height: 1;
+    letter-spacing: -0.04em;
   }
-  
-  /* Glassmorphism utility - Apple/Mac style */
-  .glass {
-    @apply bg-[hsl(var(--glass))] backdrop-blur-xl border border-[hsl(var(--border-color))] rounded-2xl;
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px) saturate(180%);
+
+  .d2 {
+    font-size: var(--display-2);
+    line-height: 1.08;
   }
-  
-  .glass-hover {
-    @apply transition-all duration-300 ease-out;
+
+  .d3 {
+    font-size: var(--display-3);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
   }
-  
-  .glass-hover:hover {
-    @apply -translate-y-1;
-    background: hsl(var(--glass) / 0.08);
-    box-shadow: 
-      0 12px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  /* The orange block, and the sign-off. Both need their own leading, and both
+     must beat `.display` rather than race a Tailwind `leading-*` for it. */
+  .d-loud {
+    font-size: var(--display-loud);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
   }
-  
-  /* Terminal prompt styling */
-  .terminal-prompt {
-    @apply font-['JetBrains_Mono',monospace] text-[hsl(var(--accent))];
+
+  .d-mark {
+    font-size: min(17.5vw, 19rem);
+    line-height: 0.8;
+    letter-spacing: -0.055em;
+    /* At this leading the line box ends above the letters. Measured against the
+       rendered face, the ink runs 0.106em past it, so the page ends exactly on
+       the tail of the "y" rather than slicing through the word. In em, so it
+       holds at every size. */
+    margin-bottom: 0.106em;
   }
-  
-  /* Accent glow effect */
-  .accent-glow {
-    text-shadow: 0 0 20px hsl(var(--accent-glow) / 0.5);
+
+  /* Figures, counts, dates and any other measured value. */
+  .tabular {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
   }
-  
-  /* Reduce motion for accessibility */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+
+  /* A measured value that is also a label: small, wide, quiet. */
+  .meta {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 11.5px;
+    line-height: 1.4;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .measure {
+    max-width: 68ch;
+  }
+
+  /* Film grain. Static, so it adds texture without flicker. */
+  .grain {
+    background-image: var(--grain);
+    background-size: 200px 200px;
+    opacity: var(--grain-opacity);
+  }
+
+  .grain-dark {
+    background-image: var(--grain-dark);
+    background-size: 200px 200px;
+  }
+
+  /* The page's one container. Sections that break it do so deliberately. */
+  .shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 1240px;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .shell {
+      padding-inline: 2rem;
     }
   }
-  
-  /* Hide scrollbar utility */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+
+  /*
+   * For a horizontal rail that runs off the right edge of the screen: its first
+   * item lines up with the text above it, and everything past the last gutter
+   * keeps going. The scroll padding matters as much as the padding — without it
+   * a mandatory snap point yanks the first card under the gutter on load.
+   */
+  .shell-inset {
+    padding-inline: max(1.25rem, calc((100% - 1240px) / 2 + 1.25rem));
+    scroll-padding-inline: max(1.25rem, calc((100% - 1240px) / 2 + 1.25rem));
   }
 
-  /* Custom chat scrollbar matching the glassy terminal aesthetic */
-  .chat-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(52,211,153,0.5) transparent;
+  @media (min-width: 640px) {
+    .shell-inset {
+      padding-inline: max(2rem, calc((100% - 1240px) / 2 + 2rem));
+      scroll-padding-inline: max(2rem, calc((100% - 1240px) / 2 + 2rem));
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Product skins.
+
+   Three things on this page are real products with design systems of their
+   own, so each is shown wearing its own rather than repainted in this site's
+   colours. A skin redefines this page's tokens for one subtree: every utility
+   inside it keeps working and simply resolves to that product's values.
+
+   Vele and Juggle both ship a light and a dark theme, so their skins follow the
+   page: on a dark page they wear their own dark theme, never this site's. A
+   light specimen glaring out of a dark page is not fidelity, it is a light left
+   on. Prompt Corpus is drawn in its dark theme on either page, which is the one
+   it is known by, and it sits comfortably on both.
+
+   Prompt Corpus's values are read from the live site's own :root. Vele's and
+   Juggle's, light and dark, are copied from their own globals.css. Nothing
+   here is a guess at their colours.
+   --------------------------------------------------------------------------- */
+
+.skin-corpus {
+  color-scheme: dark;
+
+  --c-page: #0b0a08; /* p-void */
+  --c-surface: #161513; /* p-panel */
+  --c-raised: #21201d; /* p-panel-high */
+
+  --c-ink: #ebe9e6; /* p-read */
+  --c-ink-soft: #aba9a4; /* p-read-2 */
+  --c-ink-faint: #84817c; /* p-read-3 */
+
+  --c-line: #353431; /* p-rule */
+  --c-line-strong: #4f4d49; /* p-rule-strong */
+
+  --c-accent: #f0a63c; /* p-signal */
+  --c-accent-hover: #f5b862;
+  --c-accent-ink: #0b0a08;
+  --c-accent-wash: #37250d; /* p-signal-wash */
+  --c-accent-line: #a8742c; /* p-signal-dim */
+
+  --c-shadow: 0 0 0;
+
+  background-color: var(--c-page);
+  color: var(--c-ink);
+  font-family: "Literata Variable", ui-serif, Georgia, serif;
+}
+
+.skin-vele {
+  color-scheme: light;
+
+  --c-page: #fbfcfd; /* paper */
+  --c-surface: #ffffff; /* sheet */
+  --c-raised: #eef3f8; /* wash */
+
+  --c-ink: #1c2433; /* ink */
+  --c-ink-soft: #33405a; /* ink-soft */
+  --c-ink-faint: #5b626b; /* graphite */
+
+  --c-line: #d9e2ec; /* rule */
+  --c-line-strong: #b9c6d4; /* rule-strong */
+
+  --c-accent: #b53a17; /* red-ink-text, the one that is safe to set type in */
+  --c-accent-hover: #e4572e; /* red-ink */
+  --c-accent-ink: #fbfcfd;
+  --c-accent-wash: #fdece6; /* red-wash */
+
+  --c-shadow: 28 36 51; /* shadow-ink */
+
+  /* The calendar inks, used by the week in the specimen. */
+  --v-ink-1: #2447a3; /* blue-black */
+  --v-ink-2: #1e6146; /* green */
+  --v-ink-3: #4b3d91; /* violet */
+  --v-ink-4: #0f5f6b; /* teal */
+  --v-ink-5: #7a2e3b; /* oxblood */
+  --v-ink-6: #6b4b24; /* sepia */
+  --v-pencil: #7a8189;
+  --v-hatch: 22%; /* how dark the pencil hatching is drawn */
+  --v-red: #e4572e;
+  --v-tape: #1c2433;
+  --v-tape-text: #fbfcfd;
+
+  background-color: var(--c-page);
+  color: var(--c-ink);
+  font-family: "Libre Franklin Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+.skin-juggle {
+  color-scheme: light;
+
+  /* Straight out of Juggle's own `globals.css`, in the oklch it is written in,
+     so nothing is lost converting it. Its canvas is warm where this site's is
+     neutral zinc, and its corners are sharp where this site's are soft — that,
+     more than the colour, is what makes it read as somewhere else. */
+  --c-page: oklch(98.9% 0.004 85); /* canvas */
+  --c-surface: oklch(99.8% 0.002 85); /* surface */
+  --c-raised: oklch(96.4% 0.005 85); /* surface-muted */
+
+  --c-ink: oklch(22% 0.013 62); /* ink */
+  --c-ink-soft: oklch(47.5% 0.012 66); /* ink-muted */
+  --c-ink-faint: oklch(55.5% 0.011 70); /* ink-subtle */
+
+  --c-line: oklch(90.5% 0.006 82); /* line */
+  --c-line-strong: oklch(81% 0.009 80); /* line-strong */
+
+  --c-accent: oklch(52.5% 0.142 49); /* heat-ink, the one safe to set type in */
+  --c-accent-hover: oklch(69% 0.163 58); /* heat */
+  --c-accent-ink: oklch(99% 0.01 85); /* heat-contrast */
+  --c-accent-wash: oklch(96.5% 0.035 72); /* heat-wash */
+  --c-accent-line: oklch(69% 0.163 58);
+
+  --c-shadow: 28 24 20;
+
+  /* The two states the diagram needs, plus Juggle's own corner radius. */
+  --j-heat: oklch(69% 0.163 58);
+  --j-fail: oklch(49% 0.19 27); /* fail-ink */
+  --j-fail-wash: oklch(96.5% 0.028 25);
+  --j-radius: 0.25rem;
+
+  background-color: var(--c-page);
+  color: var(--c-ink);
+}
+
+/* The dark halves of the two skins that have one. Same selectors as the page's
+   own dark theme: the system preference unless light has been chosen, or dark
+   chosen outright. Values copied from each product's dark theme, verbatim. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .skin-vele {
+    color-scheme: dark;
+
+    --c-page: #0e131b; /* paper */
+    --c-surface: #151d2a; /* sheet */
+    --c-raised: #18222f; /* wash */
+
+    --c-ink: #e7edf4; /* ink */
+    --c-ink-soft: #c3cedc; /* ink-2 */
+    --c-ink-faint: #9aa6b5; /* graphite */
+
+    --c-line: #243043; /* rule */
+    --c-line-strong: #34435b; /* rule-strong */
+
+    --c-accent: #ff8a66; /* red-ink-text */
+    --c-accent-hover: #f06a43; /* red-ink */
+    --c-accent-ink: #0e131b;
+    --c-accent-wash: #3a1e17; /* red-wash */
+
+    --c-shadow: 0 0 0;
+
+    --v-ink-1: #8fb0ff;
+    --v-ink-2: #7cc7a2;
+    --v-ink-3: #b5a8ff;
+    --v-ink-4: #72c6d3;
+    --v-ink-5: #e39aa6;
+    --v-ink-6: #d8b07a;
+    --v-pencil: #8793a3;
+    --v-hatch: 34%;
+    --v-red: #f06a43;
+    --v-tape: #e7edf4;
+    --v-tape-text: #0e131b;
   }
 
-  .chat-scrollbar::-webkit-scrollbar {
-    width: 10px;
+  :root:not([data-theme="light"]) .skin-juggle {
+    color-scheme: dark;
+
+    --c-page: oklch(16.8% 0.006 62); /* canvas */
+    --c-surface: oklch(19.8% 0.007 62); /* surface */
+    --c-raised: oklch(23.5% 0.008 62); /* surface-muted */
+
+    --c-ink: oklch(95.5% 0.005 80); /* ink */
+    --c-ink-soft: oklch(71.5% 0.012 70); /* ink-muted */
+    --c-ink-faint: oklch(60.5% 0.012 66); /* ink-subtle */
+
+    --c-line: oklch(28.5% 0.009 62); /* line */
+    --c-line-strong: oklch(37% 0.012 62); /* line-strong */
+
+    --c-accent: oklch(81% 0.135 68); /* heat-ink */
+    --c-accent-hover: oklch(75% 0.155 62); /* heat */
+    --c-accent-ink: oklch(18% 0.02 55); /* heat-contrast */
+    --c-accent-wash: oklch(27.5% 0.05 55); /* heat-wash */
+    --c-accent-line: oklch(75% 0.155 62);
+
+    --c-shadow: 0 0 0;
+
+    --j-heat: oklch(75% 0.155 62);
+    --j-fail: oklch(72% 0.155 27); /* fail-ink */
+    --j-fail-wash: oklch(27% 0.055 25);
+  }
+}
+
+:root[data-theme="dark"] .skin-vele {
+  color-scheme: dark;
+
+  --c-page: #0e131b; /* paper */
+  --c-surface: #151d2a; /* sheet */
+  --c-raised: #18222f; /* wash */
+
+  --c-ink: #e7edf4; /* ink */
+  --c-ink-soft: #c3cedc; /* ink-2 */
+  --c-ink-faint: #9aa6b5; /* graphite */
+
+  --c-line: #243043; /* rule */
+  --c-line-strong: #34435b; /* rule-strong */
+
+  --c-accent: #ff8a66; /* red-ink-text */
+  --c-accent-hover: #f06a43; /* red-ink */
+  --c-accent-ink: #0e131b;
+  --c-accent-wash: #3a1e17; /* red-wash */
+
+  --c-shadow: 0 0 0;
+
+  --v-ink-1: #8fb0ff;
+  --v-ink-2: #7cc7a2;
+  --v-ink-3: #b5a8ff;
+  --v-ink-4: #72c6d3;
+  --v-ink-5: #e39aa6;
+  --v-ink-6: #d8b07a;
+  --v-pencil: #8793a3;
+  --v-hatch: 34%;
+  --v-red: #f06a43;
+  --v-tape: #e7edf4;
+  --v-tape-text: #0e131b;
+}
+
+:root[data-theme="dark"] .skin-juggle {
+  color-scheme: dark;
+
+  --c-page: oklch(16.8% 0.006 62); /* canvas */
+  --c-surface: oklch(19.8% 0.007 62); /* surface */
+  --c-raised: oklch(23.5% 0.008 62); /* surface-muted */
+
+  --c-ink: oklch(95.5% 0.005 80); /* ink */
+  --c-ink-soft: oklch(71.5% 0.012 70); /* ink-muted */
+  --c-ink-faint: oklch(60.5% 0.012 66); /* ink-subtle */
+
+  --c-line: oklch(28.5% 0.009 62); /* line */
+  --c-line-strong: oklch(37% 0.012 62); /* line-strong */
+
+  --c-accent: oklch(81% 0.135 68); /* heat-ink */
+  --c-accent-hover: oklch(75% 0.155 62); /* heat */
+  --c-accent-ink: oklch(18% 0.02 55); /* heat-contrast */
+  --c-accent-wash: oklch(27.5% 0.05 55); /* heat-wash */
+  --c-accent-line: oklch(75% 0.155 62);
+
+  --c-shadow: 0 0 0;
+
+  --j-heat: oklch(75% 0.155 62);
+  --j-fail: oklch(72% 0.155 27); /* fail-ink */
+  --j-fail-wash: oklch(27% 0.055 25);
+}
+
+/* Vele sets its headings at 800; this site never does, so it is said once here
+   rather than repeated on every element inside the specimen. */
+.skin-vele :is(h3, h4, .v-strong) {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Vele's Dymo label tape: embossed capitals on coloured tape, the way Vele's own
+   `.dymo` draws it, down to the inset highlight and the pressed lower edge. */
+.skin-vele .v-dymo {
+  display: inline-flex;
+  align-items: center;
+  height: 1.25rem;
+  padding: 0 0.4rem;
+  border-radius: 2px;
+  background: var(--v-tape);
+  color: var(--v-tape-text);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 1px 0 rgb(var(--c-shadow) / 0.25);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--v-tape-text) 14%, transparent),
+    inset 0 -1px 0 rgb(var(--c-shadow) / 0.35);
+}
+
+/* Vele labels in its own face rather than in mono, because it has no mono in
+   its interface. This is the shape its own small caps labels take. */
+.skin-vele .v-label {
+  font-weight: 800;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/*
+ * Hot Wheels orange. The one place the page is allowed to shout. It does not change
+ * between light and dark: it is a colour block, not a surface. Ink on it is 6.2:1.
+ */
+@theme {
+  --color-hw: #f26a1b;
+  --color-hw-deep: #d9560c;
+  --color-hw-ink: #1a0d05;
+}
+
+/* ---------------------------------------------------------------------------
+   Theme change. The incoming theme is clipped in as a circle growing out of the
+   toggle itself, so the page reads as being wiped rather than swapped. Browsers
+   without the View Transitions API get the instant swap and lose nothing.
+   --------------------------------------------------------------------------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-wipe 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes theme-wipe {
+  from {
+    clip-path: circle(0 at var(--wipe-x, 50%) var(--wipe-y, 0px));
+  }
+  to {
+    clip-path: circle(var(--wipe-r, 150vmax) at var(--wipe-x, 50%) var(--wipe-y, 0px));
+  }
+}
+
+/* "Oh well." shrugs. */
+@keyframes shrug {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  55% {
+    transform: rotate(3.5deg);
+  }
+  80% {
+    transform: rotate(-1.5deg);
+  }
+}
+
+/* Snow for the Glasgow snow project. */
+@keyframes fall {
+  from {
+    transform: translate3d(0, -20px, 0);
+  }
+  to {
+    transform: translate3d(var(--drift, 0px), 520px, 0);
+  }
+}
+
+/* Stars for the night out planner. */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* A car idling. */
+@keyframes idle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* The YouTube summariser skipping through a video. */
+@keyframes skip {
+  0%,
+  22% {
+    transform: translateX(4%);
+  }
+  30%,
+  48% {
+    transform: translateX(31%);
+  }
+  56%,
+  74% {
+    transform: translateX(58%);
+  }
+  82%,
+  100% {
+    transform: translateX(88%);
+  }
+}
+
+/* Content swapping into the project preview. Transform only, never opacity. */
+@keyframes settle {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* The chatbot's typing indicator. */
+@keyframes think {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* Indeterminate progress while the simulation's host wakes up. */
+@keyframes wake {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Juggle's key-rotation diagram. One 10s loop carrying two requests, so the
+   rotation is visible: the first lands on key 3, the second on key 7.
+
+   Every window is written as an absolute percentage of the loop rather than
+   leaning on `animation-delay`, because a delayed loop wraps its own tail into
+   the next pass and the timing stops being readable. Transform and opacity
+   only, so none of it touches layout.
+   --------------------------------------------------------------------------- */
+
+/* The key that takes the request and immediately comes back throttled. */
+@keyframes j-hot-a1 {
+  0%, 9% { opacity: 0; }
+  11%, 17% { opacity: 1; }
+  19%, 100% { opacity: 0; }
+}
+
+/* The key next door, which actually serves it and holds while it resolves. It
+   only lights once the 429 has cleared, so the diagram never shows a throttle
+   and a fresh key at the same time. */
+@keyframes j-hot-a2 {
+  0%, 30% { opacity: 0; }
+  32%, 46% { opacity: 1; }
+  48%, 100% { opacity: 0; }
+}
+
+@keyframes j-hot-b1 {
+  0%, 59% { opacity: 0; }
+  61%, 67% { opacity: 1; }
+  69%, 100% { opacity: 0; }
+}
+
+@keyframes j-hot-b2 {
+  0%, 80% { opacity: 0; }
+  82%, 96% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
+/* Parked on a cooldown, and it stays parked for the rest of the loop. */
+@keyframes j-cool-a {
+  0%, 17% { opacity: 0; }
+  19%, 94% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
+@keyframes j-cool-b {
+  0%, 67% { opacity: 0; }
+  69%, 94% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
+/* The request. Each 100% is exactly one key, because the marker's own box is
+   one slot wide. It waits on the throttled key while the 429 reads, then hops. */
+@keyframes j-request {
+  0% { opacity: 0; transform: translateX(-120%); }
+  3% { opacity: 1; transform: translateX(-120%); }
+  8%, 27% { opacity: 1; transform: translateX(200%); }
+  31%, 46% { opacity: 1; transform: translateX(300%); }
+  48%, 49% { opacity: 0; transform: translateX(300%); }
+  50% { opacity: 0; transform: translateX(-120%); }
+  53% { opacity: 1; transform: translateX(-120%); }
+  58%, 77% { opacity: 1; transform: translateX(600%); }
+  81%, 96% { opacity: 1; transform: translateX(700%); }
+  98%, 100% { opacity: 0; transform: translateX(700%); }
+}
+
+@keyframes j-429 {
+  0%, 17% { opacity: 0; transform: translateY(3px); }
+  19%, 27% { opacity: 1; transform: translateY(0); }
+  29%, 67% { opacity: 0; transform: translateY(3px); }
+  69%, 77% { opacity: 1; transform: translateY(0); }
+  79%, 100% { opacity: 0; transform: translateY(3px); }
+}
+
+@keyframes j-ok {
+  0%, 33% { opacity: 0; transform: translateY(3px); }
+  35%, 46% { opacity: 1; transform: translateY(0); }
+  48%, 83% { opacity: 0; transform: translateY(3px); }
+  85%, 96% { opacity: 1; transform: translateY(0); }
+  98%, 100% { opacity: 0; transform: translateY(3px); }
+}
+
+/* Offscreen, or in a hidden tab, it stops completely rather than burning frames
+   on something nobody is looking at. */
+.j-stage[data-run="false"] *,
+.j-stage[data-run="false"] {
+  animation-play-state: paused !important;
+}
+
+/* Anything that is genuinely running right now carries this. */
+@keyframes beacon {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.75);
+  }
+}
+
+/* The scroll cue at the foot of the first screen. */
+@keyframes sink {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 
-  .chat-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 6px 0;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 
-  .chat-scrollbar::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(52,211,153,0.28), rgba(16,185,129,0.28));
-    border-radius: 999px;
-    border: 2px solid rgba(11,15,20,0.35);
-    min-height: 40px;
-  }
-
-  .chat-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(52,211,153,0.45), rgba(16,185,129,0.45));
-  }
-
-  /* Normalize markdown content inside chat bubbles to avoid default paragraph margins */
-  .markdown-content {
-    font-family: 'JetBrains_Mono', monospace;
-  }
-
-  .markdown-content p,
-  .markdown-content ul,
-  .markdown-content ol,
-  .markdown-content pre,
-  .markdown-content blockquote {
-    margin: 0 0 0.35rem 0; /* small bottom gap only */
-  }
-
-  .markdown-content pre {
-    padding: 0.5rem;
-    background: rgba(255,255,255,0.02);
-    border-radius: 0.5rem;
-    overflow: auto;
-  }
-
-  .markdown-content code {
-    background: rgba(255,255,255,0.02);
-    padding: 0.08rem 0.28rem;
-    border-radius: 0.28rem;
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
   }
 }

@@ -1,49 +1,56 @@
-import { Github, Linkedin, Instagram } from "lucide-react";
+import { ArrowUpIcon, ArrowUpRightIcon } from "@phosphor-icons/react";
+import { links, profile } from "../data/content";
+import { Wordmark } from "./Wordmark";
 
-const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
+export function Footer() {
   return (
-    <footer className="border-t border-border-color/50 py-8 mt-20">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-text-muted text-sm font-mono">
-            © {currentYear} Shreyas Gowda B. Built with React + TypeScript.
-          </p>
-          
-          <div className="flex items-center gap-4">
-            <a
-              href="https://github.com/shreyeahhs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text-muted hover:text-accent transition-colors"
-              aria-label="GitHub"
-            >
-              <Github size={20} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/shreyas-gowda-5316b51b1/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text-muted hover:text-accent transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={20} />
-            </a>
-            <a
-              href="https://www.instagram.com/shreyeahhs/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text-muted hover:text-accent transition-colors"
-              aria-label="Instagram"
-            >
-              <Instagram size={20} />
-            </a>
-          </div>
-        </div>
+    <footer className="overflow-hidden">
+      <div className="shell flex flex-wrap items-center gap-x-8 gap-y-3 pt-12">
+        <p className="meta text-ink-faint">
+          {profile.name}, {profile.city}
+        </p>
+
+        <a
+          href={links.corpus}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-1.5 text-[13.5px] text-ink-soft transition-colors hover:text-ink"
+        >
+          Prompt Corpus
+          <ArrowUpRightIcon
+            size={12}
+            weight="bold"
+            className="text-ink-faint transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          />
+        </a>
+
+        <a
+          href={links.juggle}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-1.5 text-[13.5px] text-ink-soft transition-colors hover:text-ink"
+        >
+          Juggle
+          <ArrowUpRightIcon
+            size={12}
+            weight="bold"
+            className="text-ink-faint transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          />
+        </a>
+
+        <a
+          href="#top"
+          className="group ml-auto inline-flex items-center gap-1.5 text-[13.5px] text-ink-soft transition-colors hover:text-ink"
+        >
+          Back to top
+          <ArrowUpIcon
+            size={12}
+            weight="bold"
+            className="text-ink-faint transition-transform duration-300 group-hover:-translate-y-0.5"
+          />
+        </a>
       </div>
+      <Wordmark />
     </footer>
   );
-};
-
-export default Footer;
+}

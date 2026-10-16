@@ -1,9 +1,15 @@
+from __future__ import annotations
+
+import logging
+import os
+from typing import Optional
+
+import httpx
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, EmailStr, Field
-import os
-import logging
-from typing import Optional
-import httpx
+
+from app.emails import first_name, owner_email, uk_time, visitor_email
+from app.limiter import enforce
 
 router = APIRouter()
 
@@ -16,89 +22,108 @@ class ContactMessage(BaseModel):
     message: str = Field(..., min_length=1, max_length=1000)
 
 
-def _clean_env(v: Optional[str]) -> str:
-    if not v:
+def _clean_env(value: Optional[str]) -> str:
+    if not value:
         return ""
-    return v.strip().strip('"').strip("'")
+    return value.strip().strip('"').strip("'")
 
 
-async def _send_brevo_email(
+async def _send(
     client: httpx.AsyncClient,
+    *,
     to_email: str,
     to_name: Optional[str],
     subject: str,
-    html_content: str,
-    text_content: str,
+    html_body: str,
+    text_body: str,
+    reply_to: Optional[dict] = None,
 ) -> bool:
-    """Send an email via Brevo using the transactional SMTP API."""
-    brevo_api_key = _clean_env(os.getenv("BREVO_API_KEY"))
-    contact_from_email = _clean_env(os.getenv("CONTACT_FROM_EMAIL"))
-    contact_from_name = _clean_env(os.getenv("CONTACT_FROM_NAME") or "Website Contact")
+    api_key = _clean_env(os.getenv("BREVO_API_KEY"))
+    from_email = _clean_env(os.getenv("CONTACT_FROM_EMAIL"))
+    from_name = _clean_env(os.getenv("CONTACT_FROM_NAME")) or "Shreyas"
 
-    if not brevo_api_key or not contact_from_email:
-        logging.warning("Brevo email not fully configured; skipping send")
+    if not api_key or not from_email:
+        logging.warning("Brevo is not configured; skipping send to %s", to_email)
         return False
 
-    payload = {
-        "sender": {"name": contact_from_name, "email": contact_from_email},
-        "to": [{"email": to_email, "name": (to_name or contact_from_name)}],
+    payload: dict = {
+        "sender": {"name": from_name, "email": from_email},
+        "to": [{"email": to_email, "name": to_name or to_email}],
         "subject": subject,
-        "htmlContent": html_content,
-        "textContent": text_content,
+        "htmlContent": html_body,
+        "textContent": text_body,
     }
-
-    headers = {"api-key": brevo_api_key, "Content-Type": "application/json"}
+    if reply_to:
+        payload["replyTo"] = reply_to
 
     try:
-        resp = await client.post(BREVO_SEND_URL, json=payload, headers=headers)
-        if resp.status_code >= 400:
-            logging.error("Brevo API returned %s: %s", resp.status_code, resp.text)
+        response = await client.post(
+            BREVO_SEND_URL,
+            json=payload,
+            headers={"api-key": api_key, "Content-Type": "application/json"},
+        )
+        if response.is_error:
+            logging.error("Brevo returned %s: %s", response.status_code, response.text)
             return False
         return True
-    except Exception as e:
-        logging.exception("Failed to send email via Brevo: %s", e)
+    except Exception:
+        logging.exception("Could not reach Brevo")
         return False
 
 
 @router.post("")
-async def submit_contact(contact: ContactMessage, request: Request):
-    client = request.app.state.http_client
-    logging.info("New contact: %s <%s>", contact.name, contact.email)
+async def submit_contact(payload: ContactMessage, request: Request):
+    enforce(request, limit=5, window_seconds=600, label="contact")
+    # Each message sends two emails, one of them to an address the visitor typed.
+    # Per-address limits cannot stop someone with many addresses, so the form as a
+    # whole is also capped. A personal site gets nowhere near this in a day; if it
+    # is ever hit, the email address on the page still works.
+    enforce(request, limit=50, window_seconds=86_400, label="contact", per_client=False)
 
-    # Email templates (Simplified for brevity in the response, but logically the same)
-    owner_subject = f"New contact from {contact.name}"
-    owner_html = f"""
-    <div style="font-family: sans-serif; padding: 20px;">
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> {contact.name}</p>
-        <p><strong>Email:</strong> {contact.email}</p>
-        <div style="background: #f4f4f4; padding: 15px; border-radius: 4px;">
-            <strong>Message:</strong><br/>
-            {contact.message.replace('\\n', '<br/>')}
-        </div>
-    </div>
-    """
-    owner_text = f"New contact submission\nName: {contact.name}\nEmail: {contact.email}\nMessage:\n{contact.message}"
+    client: httpx.AsyncClient = request.app.state.http_client
+    name = payload.name.strip()
+    sender = str(payload.email)
+    message = payload.message.strip()
 
-    contact_to_email = _clean_env(os.getenv("CONTACT_TO_EMAIL"))
+    logging.info("Contact form submission from %s", sender)
+
+    received = uk_time()
+    owner_to = _clean_env(os.getenv("CONTACT_TO_EMAIL"))
+
+    owner_subject, owner_html, owner_text = owner_email(
+        name=name, email=sender, message=message, received=received
+    )
+    visitor_subject, visitor_html, visitor_text = visitor_email(
+        name=name, message=message, received=received, can_reply=bool(owner_to)
+    )
+
     owner_sent = False
-    if contact_to_email:
-        owner_sent = await _send_brevo_email(client, contact_to_email, None, owner_subject, owner_html, owner_text)
+    if owner_to:
+        owner_sent = await _send(
+            client,
+            to_email=owner_to,
+            to_name="Shreyas",
+            subject=owner_subject,
+            html_body=owner_html,
+            text_body=owner_text,
+            reply_to={"email": sender, "name": name},
+        )
 
-    # Visitor Thank-You Email
-    visitor_subject = "Thanks for contacting Shreyas"
-    visitor_html = f"""
-    <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee;">
-        <h1 style="color: #3b82f6;">Thanks for reaching out!</h1>
-        <p>Hi {contact.name}, I've received your message and will get back to you soon.</p>
-        <div style="background: #f9fafb; padding: 15px; border-left: 4px solid #3b82f6;">
-            "{contact.message}"
-        </div>
-        <p>Best regards,<br/><strong>Shreyas Gowda</strong></p>
-    </div>
-    """
-    visitor_text = f"Hi {contact.name},\n\nThanks for reaching out! I've received your message and will get back to you soon.\n\nYour message:\n{contact.message}"
+    visitor_sent = await _send(
+        client,
+        to_email=sender,
+        to_name=first_name(name),
+        subject=visitor_subject,
+        html_body=visitor_html,
+        text_body=visitor_text,
+        # Replies to the receipt reach Shreyas, whatever address it was sent from.
+        reply_to={"email": owner_to, "name": "Shreyas"} if owner_to else None,
+    )
 
-    visitor_sent = await _send_brevo_email(client, contact.email, contact.name, visitor_subject, visitor_html, visitor_text)
+    if not owner_sent and not visitor_sent:
+        raise HTTPException(
+            status_code=502,
+            detail="The message could not be delivered. Please email directly instead.",
+        )
 
     return {"ok": True, "owner_notified": owner_sent, "visitor_notified": visitor_sent}
